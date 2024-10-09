@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../../Downloads/Matvey"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"arrayusage.h": "c"
+		}
+	}
+}
