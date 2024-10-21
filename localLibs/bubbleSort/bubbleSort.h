@@ -4,4 +4,4 @@
 #include <stdlib.h>
 #include "../arrayFuncs/arrayFuncs.h"
 
-void bubbleSort(int *arrayNeedToSort, int arrayLenth);
+void bubbleSort(int *arrayNeedToSort, int arrayLength);

@@ -3,4 +3,4 @@
 #include <stdlib.h>
 #include "../arrayFuncs/arrayFuncs.h"
 
-void qsorting(int *arrayNeedToSort, int arrayLenth);
+void qsorting(int *arrayNeedToSort, int arrayLength);

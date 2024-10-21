@@ -17,3 +17,9 @@ const bool isArraySorted(int *arrayNeedToCheck, const int arraysLenth) {
     }
     return isTestSucceful;
 }
+
+void reverse(int *arrayNeedToReverse, int arrayLength) {
+    for (int i = 0; i < arrayLength / 2; ++i) {
+        swap(&arrayNeedToReverse[i], &arrayNeedToReverse[arrayLength - i - 1]);
+    }
+}

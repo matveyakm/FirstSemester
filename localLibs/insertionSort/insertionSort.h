@@ -2,4 +2,4 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void insertionSort(int *arrayNeedToSort, int arrayLenth);
+void insertionSort(int *arrayNeedToSort, int arrayLength);
