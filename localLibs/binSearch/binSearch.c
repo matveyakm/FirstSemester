@@ -8,10 +8,10 @@
 #include "../qsort/qsort.h"
 #include "../arrayFuncs/arrayFuncs.h"
 
-const int findingMid(int a, int b) {
+int findingMid(int a, int b) {
     return (a + b) / 2 + ((a + b) % 2 != 0); // 
 }
-const int binSearch(const int targetNumber, int *array, int *searchFrom, int *searchTo) {
+int binSearch(const int targetNumber, int *array, int *searchFrom, int *searchTo) {
     if (*searchTo - *searchFrom <= 1) {
         return -1;
     }
@@ -27,7 +27,7 @@ const int binSearch(const int targetNumber, int *array, int *searchFrom, int *se
     return binSearch(targetNumber, array, searchFrom, searchTo);
 }
 
-const int loopSearch(const int targetNumber, int *array, const int arrayLength) {
+int loopSearch(const int targetNumber, int *array, const int arrayLength) {
     for (int i = 0; i < arrayLength; ++i) {
         if (array[i] == targetNumber) {
             return i;
@@ -36,7 +36,7 @@ const int loopSearch(const int targetNumber, int *array, const int arrayLength) 
     return -1;
 }
 
-const int qfind(const int targetNumber, int *array, const int arrayLength) {
+int qfind(const int targetNumber, int *array, const int arrayLength) {
     int searchFrom = 0;
     int searchTo = arrayLength - 1;
     if (array[searchFrom] == targetNumber) {
@@ -47,7 +47,7 @@ const int qfind(const int targetNumber, int *array, const int arrayLength) {
     return binSearch(targetNumber, array, &searchFrom, &searchTo);
 }
 
-const int find(const int targetNumber, int *array, const int arrayLength) {
+int find(const int targetNumber, int *array, const int arrayLength) {
     if (isArraySorted(array, arrayLength)) {
         return qfind(targetNumber, array, arrayLength);
     } else {
@@ -55,11 +55,11 @@ const int find(const int targetNumber, int *array, const int arrayLength) {
     }
 }
 
-const int isIn(const int targetNumber, int *array, const int arrayLength) {
+int isIn(const int targetNumber, int *array, const int arrayLength) {
     return find(targetNumber, array, arrayLength) != -1;
 }
 
-const int sortingIsIn(const int targetNumber, int *array, const int arrayLength) { // быстрее ли это, чем классика?
+int sortingIsIn(const int targetNumber, int *array, const int arrayLength) { // быстрее ли это, чем классика?
     int *arrayCopy = malloc(arrayLength * sizeof(int));
     memcpy(arrayCopy, array, arrayLength * sizeof(int));
     bubbleSort(arrayCopy, arrayLength);
