@@ -27,8 +27,4 @@ int main() {
     puts("");
 
     printf("%lld\n", (firstTerm.decimalValue + secondTerm.decimalValue));
-
-    freeBiform(&firstTerm);
-    freeBiform(&secondTerm);
-    freeBiform(&result);
 }

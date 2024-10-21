@@ -6,11 +6,10 @@
 
 typedef struct{
     long long decimalValue; // 64 bits
-    bool *binaryValue;
+    bool binaryValue[64];
 } Biform;
 
 void setBinaryValue(Biform *number);
 void setDecimalValue(Biform *number);
 void setBiform(Biform *number, long long decimalValue);
 void printBiform(Biform *number);
-void freeBiform(Biform *number);

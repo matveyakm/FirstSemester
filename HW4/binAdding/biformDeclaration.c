@@ -5,7 +5,6 @@
 
 void setBinaryValue(Biform *number) {
     int bits = sizeof(long long) * 8; // = 64
-    number->binaryValue = malloc(bits * sizeof(bool));
 
     unsigned long long decimalValueCopy = number->decimalValue;
     if (number->decimalValue < 0) { // convertation to twos complement
@@ -38,9 +37,4 @@ void printBiform(Biform *number) {
         printf("%d", number->binaryValue[i]);
     }
     puts("");
-}
-
-void freeBiform(Biform *number) { // error
-    number->decimalValue = 0;
-    free(number->binaryValue);
 }

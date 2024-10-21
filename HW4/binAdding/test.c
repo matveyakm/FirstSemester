@@ -6,20 +6,22 @@
 #include "binAdding.h"
 
 bool validationTest() {
+    puts("Wait a few minutes. Testing...");
     bool isTestSuccesful = true;
-    int countOfTests = 0;
-    int countOfSuccesfulTests = 0;
+    unsigned long long countOfTests = 0;
+    unsigned long long countOfSuccesfulTests = 0;
 
     Biform firstTerm, secondTerm, sum, theOne;
     
-    setBiform(&firstTerm, -100000);
-    setBiform(&secondTerm, -10000);
+    setBiform(&firstTerm, -10000);
     setBiform(&theOne, 1);
 
-    srand(clock());
-    while (firstTerm.decimalValue < 100000) {
-        while (secondTerm.decimalValue < 10000) {
-            if (rand() % 3 > 1) {
+    while (firstTerm.decimalValue < 10000) {
+        setBiform(&secondTerm, -1000);
+        while (secondTerm.decimalValue < 1000) {
+            srand(clock());
+            if (rand() % 12113 > 0) {
+                secondTerm = binAdd(secondTerm, theOne);
                 continue;
             }
             sum = binAdd(firstTerm, secondTerm);
@@ -36,9 +38,4 @@ bool validationTest() {
     }
     printf("[%d/%d]", countOfSuccesfulTests, countOfTests);
     puts(isTestSuccesful ? "Test succesfully passed" : "Test failed");
-
-    freeBiform(&firstTerm);
-    freeBiform(&secondTerm);
-    freeBiform(&sum);
-    freeBiform(&theOne);
 }

@@ -7,7 +7,6 @@
 Biform binAdd(Biform firstTerm, Biform secondTerm) {
     int bits = sizeof(long long) * 8; // = 64
     Biform result;
-    result.binaryValue = malloc(bits * sizeof(bool));
 
     bool carry = false;
     for (int i = bits - 1; i >= 0; --i) {
