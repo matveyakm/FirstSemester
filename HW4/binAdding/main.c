@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include "biformDeclaration.h"
 #include "binAdding.h"
-//#ifdef TEST
+#ifdef TEST
 #include "test.h"
-//#endif
+#endif
 
 int main() {
     #ifdef TEST
@@ -26,7 +26,7 @@ int main() {
     printBiform(&result);
     puts("");
 
-    printf(" %lld", (firstTerm.decimalValue + secondTerm.decimalValue)); // pointer prosrali
+    printf("%lld\n", (firstTerm.decimalValue + secondTerm.decimalValue));
 
     freeBiform(&firstTerm);
     freeBiform(&secondTerm);

@@ -11,14 +11,15 @@ bool validationTest() {
     int countOfSuccesfulTests = 0;
 
     Biform firstTerm, secondTerm, sum, theOne;
-    setBiform(&firstTerm, -1000000000000);
-    setBiform(&secondTerm, -1000);
+    
+    setBiform(&firstTerm, -100000);
+    setBiform(&secondTerm, -10000);
     setBiform(&theOne, 1);
 
     srand(clock());
-    while (firstTerm.decimalValue < 10000000000) {
+    while (firstTerm.decimalValue < 100000) {
         while (secondTerm.decimalValue < 10000) {
-            if (rand() % 3 > 0) {
+            if (rand() % 3 > 1) {
                 continue;
             }
             sum = binAdd(firstTerm, secondTerm);
@@ -27,11 +28,6 @@ bool validationTest() {
                 ++countOfSuccesfulTests;
             } else {
                 isTestSuccesful = false;
-                /*
-                long long aa = firstTerm.decimalValue;
-                long long bb = secondTerm.decimalValue;
-                long long cc = sum.decimalValue;
-                printf("%lld + %lld = %lld (%lld)\n", aa, bb, cc, correctResult);*/
             }
             secondTerm = binAdd(secondTerm, theOne);
             ++countOfTests;

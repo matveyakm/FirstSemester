@@ -15,10 +15,10 @@ void customizedInsertionSort(int *arrayNeedToSort, const int begin, const int ar
     }
 }
 
-const int ZOVpushElementToMid(int *array, const int low, const int high) {
+const int smartQSortPartition(int *array, const int low, const int high) { // из-за ошибки, что _partition уже существует
     const int pivot = array[high]; // Может быть разнообразнее
     int i = low - 1;
-    for (int j = low; j < high; j++) { // Литви вроде показывал что-то другое, но я не понял его идеи
+    for (int j = low; j < high; j++) {
         if (array[j] <= pivot) {
             ++i;  
             swap(&array[i], &array[j]); 
@@ -32,7 +32,7 @@ void subSmartQSort(int *arrayNeedToSort, const int low, const int high) {
     if (high - low <= 10) {
         customizedInsertionSort(arrayNeedToSort, low, high - low + 1);
     } else if (low < high) {
-        const int midElementIndex = ZOVpushElementToMid(arrayNeedToSort, low, high);
+        const int midElementIndex = smartQSortPartition(arrayNeedToSort, low, high);
 
         subSmartQSort(arrayNeedToSort, low, midElementIndex - 1);
         subSmartQSort(arrayNeedToSort, midElementIndex + 1, high);

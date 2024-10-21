@@ -2,8 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <math.h>
-//#include "../../localLibs/arrayFuncs/arrayFuncs.c"
+
 
 typedef struct{
     long long decimalValue; // 64 bits

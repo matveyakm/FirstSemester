@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <math.h>
-//#include "../../localLibs/arrayFuncs/arrayFuncs.c"
 #include "biformDeclaration.h"
 
 void setBinaryValue(Biform *number) {
@@ -30,7 +28,7 @@ void setDecimalValue(Biform *number) {
 
 void setBiform(Biform *number, long long decimalValue) {
     number->decimalValue = decimalValue;
-    setBinaryValue(&number);
+    setBinaryValue(number);
 }
 
 void printBiform(Biform *number) {

@@ -40,7 +40,7 @@ const bool validationTest() {
     int *array = malloc(arrayLength * sizeof(int));
     int *arrayCopy = malloc(arrayLength * sizeof(int));
 
-    for (int i = 0; i < seedLength; i++) { // наверное лучше бы рекурсией это делать
+    for (int i = 0; i < seedLength; i++) {
         randomizeSetInRange(array, arrayLength, seed[i], -100000, 100000);
         
         for (int j = 0; j < arrayLength; j++) {
@@ -60,7 +60,7 @@ const bool validationTest() {
 
         memcpy(arrayCopy, array, arrayLength * sizeof(int));
         begin = clock();
-        findFromArray(arrayCopy, array, arrayLength, arrayLength); // faster than n* logn
+        findFromArray(arrayCopy, array, arrayLength, arrayLength); // faster than n * logn
         timeUsed.findForFullArray += convertTime(clock() - begin) + timeUsed.findingEachOneWithSorting;
         for (int j = 0; j < arrayLength; j++) {
             isTestSuccesful *= arrayCopy[j] == j;
