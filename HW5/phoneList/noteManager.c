@@ -1,56 +1,92 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "fileManager.h"
+#include <string.h>
+#include "noteManager.h"
+#include "../../localLibs/arrayFuncs/arrayFuncs.h"
 
-Note makeNote(char *name, long phoneNumber) {
-    Note res = {.name = name, .phoneNumber = phoneNumber};
+Note makeNote(char name[], long phoneNumber) {
+    Note res;
+    strncpy(res.name, name, sizeof(res.name) - 1);
+    res.phoneNumber = phoneNumber;
     return res;
 }
 
 Note *loadFromFile(char *fileName, int *countOfNotes) {
-    FILE *notes = fopen(fileName, "r");
-    if (notes == NULL) {
-        puts("File reading error.");
-        exit(1);
-    }
-    
     *countOfNotes = 0;
     Note *fileNotes = malloc(100 * sizeof(Note));
 
-    size_t readingBufferSize = 256;
-    char *readingBuffer = malloc(readingBufferSize * sizeof(char));
-
-    char *name;
-    long phoneNumber;
-    while (getline(&readingBuffer, &readingBufferSize, fileNotes) != -1) {
-        if (sscanf(readingBuffer, "%s %ld", &name, &phoneNumber) == 2) {
-            fileNotes[*countOfNotes] = makeNote(name, phoneNumber);
-            ++countOfNotes;
-        } else {
-            printf("Error parsing line: %s\n", readingBuffer);
-        }
+    FILE *notes = fopen(fileName, "r");
+    if (notes == NULL) {
+        puts("File reading error.");
+        return fileNotes;
     }
 
+    size_t readingBufferSize = 256;
+    char *readingBuffer = NULL;//malloc(readingBufferSize * sizeof(char));
+
+    char name[128];
+    long phoneNumber;
+    while (getline(&readingBuffer, &readingBufferSize, notes) != -1) {
+        if (sscanf(readingBuffer, "%127s %ld", name, &phoneNumber) == 2) {
+            fileNotes[*countOfNotes] = makeNote(name, phoneNumber);
+            ++(*countOfNotes);
+        } else {
+            printf("===Error parsing line: %s\n", readingBuffer);
+        }
+    }
+    
+    free(readingBuffer);
     fclose(notes);
     return fileNotes;
 }
 
-void addNote(Note *notes, int *countOfNotes) {
-    char *name;
+void addNote(Note *notes, int countOfNotes) {
+    char name[128];
     long phoneNumber;
-    puts("Enter new note:");
-    scanf("%s %ld", &name, &phoneNumber);
-    notes[(int)countOfNotes] = makeNote(name, phoneNumber); // ???????
-    ++countOfNotes;
+    scanf("%127s %ld", name, &phoneNumber);
+    notes[countOfNotes] = makeNote(name, phoneNumber);
 }
 
-void displayNotes(Note *fileNotes, Note *tempNotes, int countOfFileNotes, int countOfTempNotes) {
-    puts("Notes loaded from file:");
+void displayNotes(Note *notes, int countOfFileNotes, int countOfTempNotes) {
+    puts(countOfFileNotes ? "=Notes loaded from file:" : "=No notes loaded from file.");
     for (int i = 0; i < countOfFileNotes; ++i) {
-        printf("%s %ld", fileNotes[i].name, fileNotes[i].phoneNumber);
+        printf("-%s %ld\n", notes[i].name, notes[i].phoneNumber);
     }
-    puts("Notes saved to temporary memory:");
-    for (int i = 0; i < countOfTempNotes; ++i) {
-        printf("%s %ld", tempNotes[i].name, tempNotes[i].phoneNumber);
+    puts(countOfTempNotes ? "=Notes saved to temporary memory:" : "=No notes in temporary memory.");
+    for (int i = countOfFileNotes; i < countOfTempNotes + countOfFileNotes; ++i) {
+        printf("-%s %ld\n", notes[i].name, notes[i].phoneNumber);
     }
+}
+
+long findPhoneNumber(Note *notes, int countOfNotes) {
+    char name[128];
+    scanf("%s", &name);
+
+    for (int i = 0; i < countOfNotes; ++i) {
+        if (strcmp(notes[i].name, name) == 0) {
+            return notes[i].phoneNumber;
+        }
+    }
+    return -1;
+}
+
+char *findName(Note *notes, int countOfNotes) {
+    long *phoneNumber;
+    scanf("%ld", &phoneNumber);
+
+    for (int i = 0; i < countOfNotes; ++i) {
+        if (phoneNumber == notes[i].phoneNumber) {
+            return notes[i].name; //
+        }
+    }
+    return "";
+}
+
+bool saveToDisk(char *fileName, Note *notes, int countOfNotes) {
+    FILE *file = fopen(fileName, "w");
+    for (int i = 0; i < countOfNotes; ++i) {
+        fprintf(file, "%s %ld\n", notes[i].name, notes[i].phoneNumber);
+    }
+    fclose(file);
+    return true; //
 }
