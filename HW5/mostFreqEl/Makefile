@@ -14,14 +14,15 @@ CC = gcc
 CFLAGS = -Wall -Wextra -std=c11 $(TEST_FLAGS)
 
 # Файлы исходного кода
-SRC = main.c\
+SRC = main.c fileReader.c test.c\
     ../../localLibs/arrayFuncs/arrayFuncs.c \
     ../../localLibs/binSearch/binSearch.c \
     ../../localLibs/bubbleSort/bubbleSort.c \
     ../../localLibs/insertionSort/insertionSort.c \
     ../../localLibs/qsort/qsort.c \
     ../../localLibs/testingTools/testingTools.c \
-    ../../HW3/mostFreqElement/findingMostFreqElement.h
+    ../../HW3/mostFreqElement/findingMostFreqElement.c \
+    ../../HW3/mostFreqElement/test.c
 
 # Файлы заголовков
 INCLUDES = -I. -I../../localLibs/arrayFuncs -I../../localLibs/binSearch \
