@@ -56,6 +56,6 @@ void printArray(int *array, int arrayLength) {
     puts("");
 }
 
-const double convertTime(const clock_t time) { // ms
+double convertTime(const clock_t time) { // ms
   return (double)time / (CLOCKS_PER_SEC / 1000.0);
 }
