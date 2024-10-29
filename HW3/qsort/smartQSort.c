@@ -6,7 +6,7 @@ void customizedInsertionSort(int *arrayNeedToSort, const int begin, const int ar
     if (arrayLength <= 1) return;
     for (int i = 1 + begin; i < begin + arrayLength; i++) {
         int currentElement = arrayNeedToSort[i];
-        int j = i - 1; // Для перезаполнения
+        int j = i - 1; // filling index
         while (j >= 0 && arrayNeedToSort[j] > currentElement) {
             arrayNeedToSort[j + 1] = arrayNeedToSort[j];
             --j;
@@ -15,8 +15,8 @@ void customizedInsertionSort(int *arrayNeedToSort, const int begin, const int ar
     }
 }
 
-const int smartQSortPartition(int *array, const int low, const int high) { // из-за ошибки, что _partition уже существует
-    const int pivot = array[high]; // Может быть разнообразнее
+int smartQSortPartition(int *array, const int low, const int high) { 
+    const int pivot = array[high]; // can be more variable
     int i = low - 1;
     for (int j = low; j < high; j++) {
         if (array[j] <= pivot) {
@@ -40,5 +40,8 @@ void subSmartQSort(int *arrayNeedToSort, const int low, const int high) {
 }   
 
 void smartQSorting(int *arrayNeedToSort, const int arrayLength) {
+    if (arrayLength <= 1 || arrayNeedToSort == NULL) {
+        return;
+    }
     subSmartQSort(arrayNeedToSort, 0, arrayLength - 1);
 }

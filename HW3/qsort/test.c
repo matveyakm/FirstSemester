@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
+#include "../../localLibs/arrayFuncs/arrayFuncs.h"
 #include "../../localLibs/testingTools/testingTools.h"
 #include "../../localLibs/qsort/qsort.h"
 #include "smartQSort.h"
@@ -11,15 +12,7 @@ typedef struct {
   double smartQSort;
 } TimeUsed;
 
-const bool areArraysEqual(int *firstArray, int *secondArray, const int arrayLength) {
-    bool areEqual = true;
-    for (int i = 0; i < arrayLength; ++i) {
-        areEqual *= firstArray[i] == secondArray[i];
-    }
-    return areEqual;
-}
-
-const bool defaultTest() {
+bool defaultTest() { // compare with prefilled
     int defaultArray[] = {52, 144, 0, -2, 6, 3, 7, 3, 99};
     int defaultArrayLength = sizeof(defaultArray) / sizeof(defaultArray[0]);
 
@@ -30,7 +23,7 @@ const bool defaultTest() {
     return areArraysEqual(defaultArray, expectingResult, defaultArrayLength);
 }
 
-const bool validationTest() {
+bool validationTest(bool needToDisplayTimeUsedByMethods) {
     bool isTestSuccesful = defaultTest();
     int seed[] = {52, 666, 4, 89, 5843, 101, 123, 5, 54358, 33, 947};
     int countOfSeeds = sizeof(seed) / sizeof(seed[0]);
@@ -63,8 +56,10 @@ const bool validationTest() {
     free(arrayNeedToTestSmartWay);
 
     puts(isTestSuccesful ? "Test succesful\n" : "Test failed\n");
-    printf("Classic quick sort used %.5f ms (%d elements)\n", timeUsed.qsort / countOfSeeds, arrayLength);
-    printf("Smart quick sort used %.5f ms (%d elements)\n", timeUsed.smartQSort / countOfSeeds, arrayLength);
+    if (needToDisplayTimeUsedByMethods) {
+        printf("Classic quick sort used %.5f ms (%d elements)\n", timeUsed.qsort / countOfSeeds, arrayLength);
+        printf("Smart quick sort used %.5f ms (%d elements)\n", timeUsed.smartQSort / countOfSeeds, arrayLength);
+    }
 
     return isTestSuccesful;
 }
