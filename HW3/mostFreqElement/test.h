@@ -7,4 +7,4 @@
 #include "../../localLibs/qsort/qsort.h"
 #include "findingMostFreqElement.h"
 
-bool validationTest();
+bool validationTest(bool needToDisplayTimeUsedByMethods);

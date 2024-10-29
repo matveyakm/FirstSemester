@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 #include "../../localLibs/arrayFuncs/arrayFuncs.h"
 #include "../../localLibs/testingTools/testingTools.h"
 
-const int linearFindForMostFreqElement(int *array, const int arrayLength) {
+int linearFindForMostFreqElement(int *array, const int arrayLength) {
     int mostFrequentElement = array[0];
     int maxCounted = 0;
     int currentCountingElement = 0;
@@ -21,12 +22,11 @@ const int linearFindForMostFreqElement(int *array, const int arrayLength) {
             currentCountingElement = array[i];
             currentCounted = 1;
         }
-        //printf("%d / %d %d %d %d\n",i,mostFrequentElement,maxCounted,currentCountingElement,currentCounted);
     }
     return mostFrequentElement;
 }
 
-const int quadraticFindForMostFreqElement(int *array, const int arrayLength) {
+int quadraticFindForMostFreqElement(int *array, const int arrayLength) {
     int mostFrequentElement = 0;
     int maxCounted = 0;
     for (int i = 0; i < arrayLength; i++) {
@@ -42,15 +42,22 @@ const int quadraticFindForMostFreqElement(int *array, const int arrayLength) {
     return mostFrequentElement;
 }
 
-const int findForMostFreqElement(int *array, const int arrayLength) {
-    if (isArraySorted(array, arrayLength)) {
-        return linearFindForMostFreqElement(array, arrayLength);
-    } else {
-        return quadraticFindForMostFreqElement(array, arrayLength);
+int findForMostFreqElement(int *array, const int arrayLength) {
+    if (arrayLength <= 0 || array == NULL) {
+        puts("Passed array or pointer is empty!");
+        return 0;
     }
+    int *arrayCopy = malloc(arrayLength * sizeof(int));
+    memcpy(arrayCopy, array, arrayLength * sizeof(int));
+    if (!isArraySorted(array, arrayLength)) {
+        qsorting(arrayCopy, arrayLength);
+    }
+    int result = linearFindForMostFreqElement(arrayCopy, arrayLength);
+    free(arrayCopy);
+    return result;
 }
 
-const int findForMostFreqElementByCounting(int *array, const int arrayLength) { // никаких хэш-таблиц
+int findForMostFreqElementByCounting(int *array, const int arrayLength) {
     int smallestElementValue = array[0];
     int biggestElementValue = array[0];
     for (int i = 0; i < arrayLength; ++i) {
@@ -61,6 +68,11 @@ const int findForMostFreqElementByCounting(int *array, const int arrayLength) { 
         }
     }
     int maximumOfElementValueTypes = biggestElementValue - smallestElementValue + 1;
+    if (maximumOfElementValueTypes > 1000000) {
+        puts("Difference between max element and min element is too big to calculate by counting!");
+        return 0;
+    }
+
     int *elementCounter = malloc(maximumOfElementValueTypes * sizeof(int));
     for (int i = 0; i < arrayLength; ++i) {
         ++elementCounter[array[i] - smallestElementValue];

@@ -4,7 +4,7 @@
 #include "../../localLibs/arrayFuncs/arrayFuncs.h"
 #include "../../localLibs/testingTools/testingTools.h"
 
-int findForMostFreqElement(int *array, int arrayLength);
+int findForMostFreqElement(int *array, int arrayLength); // do not pass an empty array
 
 // ===== not recommended for usage. only for experiment
 int linearFindForMostFreqElement(int *array, int arrayLength);
