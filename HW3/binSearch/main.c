@@ -12,7 +12,7 @@
 
 int main() {
     #ifdef TEST
-            validationTest();
+            validationTest(false);
     #endif
     // RELEASE
     {
@@ -43,7 +43,6 @@ int main() {
 
         findFromArray(targetNumbers, array, k, n);     
         printArray(targetNumbers, k);
-        
 
         free(array);
         free(targetNumbers);

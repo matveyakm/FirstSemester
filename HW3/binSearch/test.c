@@ -14,7 +14,7 @@ typedef struct {
   double findForFullArray;
 } TimeUsed;
 
-const bool defaultTest() { // comparing with prefilled
+bool defaultTest() { // comparing with prefilled
     int array[] = {6, 52, 4234, 576, 0, -3454, 43, 898};
     int arrayLength = sizeof(array) / sizeof(array[0]);
     int targets[] = {777, 0, 43, 52, 58493, 9, -999, 4234, 898, 943};
@@ -26,10 +26,11 @@ const bool defaultTest() { // comparing with prefilled
                 return false;
             }
     }
-    return true;
+    int emptyArray[] = {};
+    return find(1, emptyArray, 0) == -1;
 }
 
-const bool validationTest() {
+bool validationTest(bool needToDisplayTimeUsedByMethods) {
     bool isTestSuccesful = defaultTest();
     TimeUsed timeUsed = {0.0f, 0.0f, 0.0f, 0.0f};
     clock_t begin;
@@ -43,6 +44,8 @@ const bool validationTest() {
     for (int i = 0; i < seedLength; i++) {
         randomizeSetInRange(array, arrayLength, seed[i], -100000, 100000);
         
+        isTestSuccesful *= find(100000 + 1, array, arrayLength) == -1;
+
         for (int j = 0; j < arrayLength; j++) {
             begin = clock();
             isTestSuccesful *= find(array[j], array, arrayLength) == j; // n * n
@@ -72,11 +75,15 @@ const bool validationTest() {
     free(array);
     free(arrayCopy);
 
+    isTestSuccesful *= find(52, array, arrayLength) == -1;
+
     puts(isTestSuccesful ? "Test succesful\n" : "Test failed\n");
-    printf("findingEachOneInNotSorted used %.5fms\n", timeUsed.findingEachOneInNotSorted);
-    printf("findingEachOneInSorted used %.5fms\n", timeUsed.findingEachOneInSorted);
-    printf("findingEachOneWithSorting used %.5fms\n", timeUsed.findingEachOneWithSorting);
-    printf("findingForFullArray used %.5fms\n", timeUsed.findForFullArray);
+    if (needToDisplayTimeUsedByMethods) {
+        printf("findingEachOneInNotSorted used %.5fms\n", timeUsed.findingEachOneInNotSorted);
+        printf("findingEachOneInSorted used %.5fms\n", timeUsed.findingEachOneInSorted);
+        printf("findingEachOneWithSorting used %.5fms\n", timeUsed.findingEachOneWithSorting);
+        printf("findingForFullArray used %.5fms\n", timeUsed.findForFullArray);
+    }
 
     return isTestSuccesful;
 }

@@ -8,4 +8,4 @@
 #include "../../localLibs/binSearch/binSearch.h"
 #include "../../localLibs/testingTools/testingTools.h"
 
-bool validationTest();
+bool validationTest(bool needToDisplayTimeUsedByMethods);
