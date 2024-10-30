@@ -3,18 +3,27 @@
 #include <string.h>
 #include "noteManager.h"
 
-void startProcessing() {
+bool savingOnDiskDebuger() {
+    puts("===There may have been problems writing the file to disk. Please check its contents.");
+    puts("===If all notes you expected to find are there print OK else print MISTAKE");
+    char action[52];
+    scanf("%s", &action);
+    return strcmp(action, "OK") == 0;
+}
+
+void startProcessing(char *fileName) {
     int countOfNotesOnDisk;
     int countOfTempNotes = 0;
-    Note *notes = loadFromFile("./notebook.txt", &countOfNotesOnDisk);
+    Note *notes = loadFromFile(fileName, &countOfNotesOnDisk);
 
     bool needToLoop = true;
     while (needToLoop) {
         int action;
-        printf("==Enter command: ");
+        printf("==Enter a command: ");
         if (scanf("%d", &action) != 1) {
-            puts("===You can only enter a integer number!===\nExiting.");
-            break;
+            puts("===You can only enter a integer number!===\nExiting...\nTrying to save notes to the disk...\n");
+            puts(saveToDisk(fileName, notes, countOfNotesOnDisk + countOfTempNotes) ? "Notes saved." : "Saving failed.");
+            break; // 
         }
         switch (action) {
         case 0:
@@ -24,8 +33,7 @@ void startProcessing() {
         case 1:
             if (countOfNotesOnDisk + countOfTempNotes < 100) {
                 puts("=Enter a name and a phone number to save it to temporary memory:");
-                addNote(notes, countOfTempNotes + countOfNotesOnDisk);
-                ++countOfTempNotes;
+                countOfTempNotes += addNote(notes, countOfTempNotes + countOfNotesOnDisk);;
             } else {
                 puts("=No memory to keep a new note.");
             }
@@ -56,10 +64,13 @@ void startProcessing() {
             break;
 
         case 5:
-            puts("=Saving all notes to disk...");
-            if (saveToDisk("./notebook.txt", notes, countOfNotesOnDisk + countOfTempNotes)) {
+            puts("=Saving notes to the disk...");
+            if (saveToDisk(fileName, notes, countOfNotesOnDisk + countOfTempNotes) || savingOnDiskDebuger()) {
                 countOfNotesOnDisk += countOfTempNotes;
                 countOfTempNotes = 0;
+                puts("=Saved.");
+            } else {
+                puts("===Try again.");
             }
             break;
 

@@ -2,5 +2,5 @@
 #include "inputHandler.h"
 
 int main() {
-    startProcessing();
+    startProcessing("./notebook.txt");
 }

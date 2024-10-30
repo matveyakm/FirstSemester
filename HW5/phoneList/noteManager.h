@@ -8,8 +8,7 @@ typedef struct {
 } Note;
 
 Note *loadFromFile(char *fileName, int *countOfNotes);
-Note makeNote(char *name, long phoneNumber);
-void addNote(Note *notes, int countOfNotes);
+bool addNote(Note *notes, int countOfNotes);
 void displayNotes(Note *notes, int countOfFileNotes, int countOfTempNotes);
 long findPhoneNumber(Note *notes, int countOfNotes);
 char *findName(Note *notes, int countOfNotes);
