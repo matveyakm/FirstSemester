@@ -37,15 +37,17 @@ void push(Stack *stack, int value) {
     stack->head = newElement;
 }
 
-void pop(Stack *stack) {
+int pop(Stack *stack) {
+    int removableElement = peek(stack);
     StackElement *temp = stack->head;
     stack->head = (stack->head)->next;
     free(temp);
+    return removableElement;
 }
 
 void deleteStack(Stack *stack) {
-    while (!isEmpty(stack->head)) {
-        pop(stack->head);
+    while (!isEmpty(stack)) {
+        pop(stack);
     }
     free(stack);
 }

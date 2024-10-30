@@ -48,6 +48,9 @@ int qfind(const int targetNumber, int *array, const int arrayLength) {
 }
 
 int find(const int targetNumber, int *array, const int arrayLength) {
+    if (arrayLength < 1) {
+        return -1;
+    }
     if (isArraySorted(array, arrayLength)) {
         return qfind(targetNumber, array, arrayLength);
     } else {
