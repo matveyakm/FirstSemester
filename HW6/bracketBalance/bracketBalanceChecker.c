@@ -17,16 +17,11 @@ bool areBracketsBalanced(char *string) {
     for (int i = 0; i < stringLength; ++i) {
         if (string[i] == '(' || string[i] == '{' || string[i] == '[') {
             push(brackets, string[i]);
-            //printf("ADDED %c\n", peek(brackets));
         } else if (string[i] == ')' || string[i] == '}' || string[i] == ']') {
-            //printf("DELETED %c\n", peek(brackets));
             if (isEmpty(brackets) || !isPair((char)pop(brackets), string[i])) {
                 deleteStack(brackets);
-                //puts("EX");
                 return false;
             }
-        } else {
-            //printf("IGNORED %c\n", string[i]);
         }
     }
 
