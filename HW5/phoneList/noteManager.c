@@ -22,7 +22,7 @@ Note *loadFromFile(char *fileName, int *countOfNotes) {
     }
 
     size_t readingBufferSize = 256;
-    char *readingBuffer = NULL;//malloc(readingBufferSize * sizeof(char));
+    char *readingBuffer = NULL;
 
     char name[128];
     long phoneNumber;
@@ -40,11 +40,15 @@ Note *loadFromFile(char *fileName, int *countOfNotes) {
     return fileNotes;
 }
 
-void addNote(Note *notes, int countOfNotes) {
+bool addNote(Note *notes, int countOfNotes) {
     char name[128];
     long phoneNumber;
-    scanf("%127s %ld", name, &phoneNumber);
+    if (scanf("%127s %ld", name, &phoneNumber) != 2) {
+        puts("===Do not use spaces or more than 128 symbols in a name! Input ignored, try again.");
+        return false;
+    }
     notes[countOfNotes] = makeNote(name, phoneNumber);
+    return true;
 }
 
 void displayNotes(Note *notes, int countOfFileNotes, int countOfTempNotes) {
@@ -76,7 +80,7 @@ char *findName(Note *notes, int countOfNotes) {
 
     for (int i = 0; i < countOfNotes; ++i) {
         if (phoneNumber == notes[i].phoneNumber) {
-            return notes[i].name; //
+            return notes[i].name; 
         }
     }
     return "";
@@ -84,9 +88,10 @@ char *findName(Note *notes, int countOfNotes) {
 
 bool saveToDisk(char *fileName, Note *notes, int countOfNotes) {
     FILE *file = fopen(fileName, "w");
+    bool isSavingSuccesful = file != NULL;
     for (int i = 0; i < countOfNotes; ++i) {
-        fprintf(file, "%s %ld\n", notes[i].name, notes[i].phoneNumber);
+        isSavingSuccesful *= fprintf(file, "%s %ld\n", notes[i].name, notes[i].phoneNumber) >= 0;
     }
-    fclose(file);
-    return true; //
+    isSavingSuccesful *= fclose(file) == 0;
+    return isSavingSuccesful;
 }
