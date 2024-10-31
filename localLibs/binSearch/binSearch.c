@@ -58,7 +58,7 @@ int find(const int targetNumber, int *array, const int arrayLength) {
     }
 }
 
-int isIn(const int targetNumber, int *array, const int arrayLength) {
+bool isIn(const int targetNumber, int *array, const int arrayLength) {
     return find(targetNumber, array, arrayLength) != -1;
 }
 

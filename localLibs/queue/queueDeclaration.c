@@ -13,7 +13,7 @@ struct Queue {
     Element *rear;
 };
 
-void *createElement(int value) {
+static void *createElement(int value) {
     Element *newElement = malloc(sizeof(Element));
     newElement->value = value;
     newElement->next = NULL; //
@@ -25,14 +25,14 @@ Queue *createQueue() {
     return queue;
 }
 
-bool isEmpty(Queue *queue) {
+bool isQueueEmpty(Queue *queue) {
     return queue->front == NULL;
 }
 
 void enqueue(Queue *queue, int value) {
     Element *newElement = createElement(value);
 
-    if (isEmpty(queue)) {
+    if (isQueueEmpty(queue)) {
         queue->front = newElement;
     } else {
         queue->rear->next = newElement;
@@ -41,7 +41,7 @@ void enqueue(Queue *queue, int value) {
 }
 
 int dequeue(Queue *queue) {
-    if (isEmpty(queue)) {
+    if (isQueueEmpty(queue)) {
         return 1;
     }
     Element *temp = queue->front;
@@ -54,15 +54,15 @@ int dequeue(Queue *queue) {
     return value;
 }
 
-int peek(Queue *queue) {
-    if (isEmpty(queue)) {
+int peekQueue(Queue *queue) {
+    if (isQueueEmpty(queue)) {
         return 1;
     }
     return queue->front->value;
 }
 
 void deleteQueue(Queue *queue) {
-    while (!isEmpty(queue)) {
+    while (!isQueueEmpty(queue)) {
         dequeue(queue);
     }
     free(queue); //

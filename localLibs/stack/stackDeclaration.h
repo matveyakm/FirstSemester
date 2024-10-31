@@ -5,8 +5,11 @@
 typedef struct Stack Stack;
 
 Stack *createStack();
-bool isEmpty(Stack *stack);
-int peek(Stack *stack);
+bool isStackEmpty(Stack *stack);
+int peekStack(Stack *stack);
 void push(Stack *stack, int value);
 int pop(Stack *stack);
 void deleteStack(Stack *stack);
+
+// If you use this header and want to be able to use 'peek' or 'isEmpty' functions,
+// you have to include the containerUtils header

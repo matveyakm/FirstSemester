@@ -12,7 +12,7 @@
 int find(int targetNumber, int *array, int arrayLength); // binSearch with check for correctly sorted array.
 int qfind(int targetNumber, int *array, int arrayLength); // binSearch ignoring checking
 // turning -1 -- there no element in the array
-int isIn(int targetNumber, int *sortedarray, int arrayLength); // sort then binSearch
+bool isIn(int targetNumber, int *sortedarray, int arrayLength);
 
 // Need for checking presence nums from one array in another using O(log) IF BOTH ARRAYS ARE SORTED
 int findFromArray(int *targetNumbersArray, int *array, int targetArrayLength, int arratLength);

@@ -8,14 +8,16 @@ void swap(int *a, int *b) {
     *b = temp;
 }
 
-bool isArraySorted(int *arrayNeedToCheck, const int arraysLenth) {
-    bool isTestSucceful = true;
-    for (int i = 1; i < arraysLenth; i++) {
+bool isArraySorted(int *arrayNeedToCheck, const int arrayLength) {
+    if (arrayLength <= 1) {
+        return true;
+    }
+    for (int i = 1; i < arrayLength; i++) {
         if (arrayNeedToCheck[i-1] > arrayNeedToCheck[i]) {
-            isTestSucceful = false;
+            return false;
         }
     }
-    return isTestSucceful;
+    return true;
 }
 
 void reverse(int *arrayNeedToReverse, int arrayLength) {

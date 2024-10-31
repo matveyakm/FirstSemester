@@ -5,9 +5,11 @@
 typedef struct Queue Queue;
 
 Queue *createQueue();
-bool isEmpty(Queue *queue);
+bool isQueueEmpty(Queue *queue);
 void enqueue(Queue *queue, int value);
 int dequeue(Queue *queue);
-int peek(Queue *queue);
+int peekQueue(Queue *queue);
 void deleteQueue(Queue *queue);
 
+// If you use this header and want to be able to use 'peek' or 'isEmpty' functions,
+// you have to include the containerUtils header

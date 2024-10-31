@@ -11,7 +11,7 @@ struct Stack {
     StackElement *head;
 };
 
-void *createElement(int value) {
+static void *createElement(int value) {
     StackElement *newElement = malloc(sizeof(StackElement));
     newElement->value = value;
     newElement->next = NULL;
@@ -23,11 +23,11 @@ Stack *createStack() {
     return stack;
 }
 
-bool isEmpty(Stack *stack) {
+bool isStackEmpty(Stack *stack) {
     return stack->head == NULL;
 }
 
-int peek(Stack *stack) {
+int peekStack(Stack *stack) {
     return stack->head->value;
 }
 
@@ -38,7 +38,7 @@ void push(Stack *stack, int value) {
 }
 
 int pop(Stack *stack) {
-    int removableElement = peek(stack);
+    int removableElement = peekStack(stack);
     StackElement *temp = stack->head;
     stack->head = (stack->head)->next;
     free(temp);
@@ -46,7 +46,7 @@ int pop(Stack *stack) {
 }
 
 void deleteStack(Stack *stack) {
-    while (!isEmpty(stack)) {
+    while (!isStackEmpty(stack)) {
         pop(stack);
     }
     free(stack);
