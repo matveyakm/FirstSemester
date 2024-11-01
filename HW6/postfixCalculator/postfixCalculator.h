@@ -1,7 +1,7 @@
 #pragma once
 
-// Note: it can calculate numbers only with 1 digit in its notation!
-// Note: also it can parse only "+ - * /" operators and round brackets if it is in an infix form
+// Note: Use a Space to separate numbers.
+// Note: It can parse only "+ - * /" operators and round brackets if it is in an infix form
 // Note: You must pass numbers with the negative value (for exaple, A) in this way: "0 - B", where 'B' = abs(A)
 
 int postfixCalculator(void *rawPostfixExpression);

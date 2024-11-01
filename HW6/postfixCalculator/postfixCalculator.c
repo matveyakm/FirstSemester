@@ -4,7 +4,6 @@
 #include <stdbool.h>
 #include "../../localLibs/stack/stackDeclaration.h"
 #include "../../localLibs/queue/queueDeclaration.h"
-#include "../../localLibs/binSearch/binSearch.h"
 #include "sortingStation.h"
 
 bool isString(void *container) { // =)
@@ -21,7 +20,16 @@ bool isString(void *container) { // =)
     return true; 
 }
 
-const char expectedSymbols[] = " *+-/0123456789";
+const char expectedSymbols[] = "*+-/ 0123456789";
+
+bool isExpectedSymbol(char token) {
+    for (int i = 0; i < strlen(expectedSymbols); ++i) {
+        if (token == expectedSymbols[i]) {
+            return true;
+        }
+    }
+    return false;
+}
 
 Stack *postfixExpressionParser(void *rawPostfixExpression) {
     if (!isString(rawPostfixExpression)) {
@@ -31,9 +39,7 @@ Stack *postfixExpressionParser(void *rawPostfixExpression) {
     char *string = (char *)rawPostfixExpression;
     int stringLength = strlen(rawPostfixExpression);
     for (int i = 0; i < stringLength; ++i) {
-        if (isIn(string[i], expectedSymbols, strlen(expectedSymbols))) { // err
-            enqueue(queue, string[i]);
-        }
+        enqueue(queue, string[i]);
     }
     return queue;
 }
@@ -51,13 +57,14 @@ bool calculate(Stack *operands, char operator) {
             push(operands, pop(operands) + tempValue);
             return true;
         case '-':
-            push(operands, pop(operands) - tempValue);//
+            push(operands, pop(operands) - tempValue);
             return true;
         case '*':
-            push(operands, pop(operands) * tempValue);//
+            push(operands, pop(operands) * tempValue);
             return true;
         case '/':
             if (tempValue == 0) {
+                puts("Division by zero.");
                 return false;
             } else {
                 push(operands, pop(operands) / tempValue);
@@ -75,7 +82,7 @@ int postfixCalculator(void *rawPostfixExpression) {
     bool nextNumberParsing = true;
     while(!isQueueEmpty(postfixExpression)) {
         char token = dequeue(postfixExpression); 
-        if ((token >= '(' && token <= '9') || token == ' ') { //
+        if (isExpectedSymbol(token)) {
             if (token >= '0' && token <= '9') {
                 if (nextNumberParsing || isStackEmpty(operands)) {
                     push(operands, (int)token - 48);
@@ -88,7 +95,7 @@ int postfixCalculator(void *rawPostfixExpression) {
             } else {
                 nextNumberParsing = true;
                 if (!calculate(operands, token)) {
-                    puts("Calculation error. ERR 10");
+                    puts("Calculation failed. ERR ERR=10");
                     deleteStack(operands);
                     deleteQueue(postfixExpression);//
                     return 0;
@@ -97,14 +104,14 @@ int postfixCalculator(void *rawPostfixExpression) {
         }
     }
     if (isStackEmpty(operands)) {
-        puts("Calculation error. 11");
+        puts("Calculation failed. ERR=11"); // Вероятнее всего, очередь пришла пустой.
         deleteStack(operands);
         deleteQueue(postfixExpression);//
         return 0;
     }
     int resultValue = pop(operands);
     if (!isStackEmpty(operands)) {
-        puts("Calculation error. 12");
+        puts("Calculation failed. ERR=12");
         deleteStack(operands);
         deleteQueue(postfixExpression);//
         return 0;

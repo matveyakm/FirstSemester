@@ -21,8 +21,8 @@ Queue *sortingMachine(char *infixExpession) {
         } else if (token == '+' || token == '-' || token == '*' || token == '/') {
             enqueue(postfixExpression, ' ');
             while (!isStackEmpty(operators) && isPriorityOfThisOperatorIsBigger(peekStack(operators), token)) {
-                enqueue(postfixExpression, ' ');
                 enqueue(postfixExpression, pop(operators));
+                enqueue(postfixExpression, ' ');
             }
             push(operators, token);
         } else if (token == '(') {
