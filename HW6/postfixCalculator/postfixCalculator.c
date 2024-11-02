@@ -80,6 +80,7 @@ int postfixCalculator(void *rawPostfixExpression) {
     Queue *postfixExpression = postfixExpressionParser(rawPostfixExpression);
     Stack *operands = createStack(); // it is going to keep numbers in the int form, not in ascii
     bool nextNumberParsing = true;
+    bool isQueuePassedEmpty = isQueueEmpty(postfixExpression);
     while(!isQueueEmpty(postfixExpression)) {
         char token = dequeue(postfixExpression); 
         if (isExpectedSymbol(token)) {
@@ -95,7 +96,7 @@ int postfixCalculator(void *rawPostfixExpression) {
             } else {
                 nextNumberParsing = true;
                 if (!calculate(operands, token)) {
-                    puts("Calculation failed. ERR ERR=10");
+                    puts("Calculation failed. ERR=10");
                     deleteStack(operands);
                     deleteQueue(postfixExpression);//
                     return 0;
@@ -104,7 +105,7 @@ int postfixCalculator(void *rawPostfixExpression) {
         }
     }
     if (isStackEmpty(operands)) {
-        puts("Calculation failed. ERR=11"); // Вероятнее всего, очередь пришла пустой.
+        puts(isQueuePassedEmpty ? "Calculation failed. ERR=111" : "Calculation failed. ERR=110");
         deleteStack(operands);
         deleteQueue(postfixExpression);//
         return 0;
@@ -123,5 +124,6 @@ int postfixCalculator(void *rawPostfixExpression) {
 }
 
 int calculator(char *infixExpression) {
-    return postfixCalculator(sortingMachine(infixExpression));
+    Queue *postfixQueue = sortingMachine(infixExpression);
+    return postfixCalculator(postfixQueue);
 }

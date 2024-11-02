@@ -5,8 +5,15 @@
 #include "../../localLibs/stack/stackDeclaration.h"
 #include "../../localLibs/queue/queueDeclaration.h"
 
-bool isPriorityOfThisOperatorIsBigger(int thisOperator, int anotherOperator) {
-    return (thisOperator == '*' || thisOperator == '/') > (anotherOperator == '*' || anotherOperator == '/');
+int priorityOfOperator(char thisOpeartor) {
+    if (thisOpeartor == '+' || thisOpeartor == '-') {
+        return 0;
+    } else if (thisOpeartor == '/') {
+        return 1;
+    } else if (thisOpeartor == '*') {
+        return 1;
+    }
+    return -1;
 }
 
 Queue *sortingMachine(char *infixExpession) {
@@ -20,7 +27,7 @@ Queue *sortingMachine(char *infixExpession) {
             enqueue(postfixExpression, token);
         } else if (token == '+' || token == '-' || token == '*' || token == '/') {
             enqueue(postfixExpression, ' ');
-            while (!isStackEmpty(operators) && isPriorityOfThisOperatorIsBigger(peekStack(operators), token)) {
+            while (!isStackEmpty(operators) && priorityOfOperator(peekStack(operators)) >= priorityOfOperator(token)) {
                 enqueue(postfixExpression, pop(operators));
                 enqueue(postfixExpression, ' ');
             }
@@ -58,11 +65,7 @@ Queue *sortingMachine(char *infixExpession) {
 }
 
 char *postfixExpressionToString(Queue *postfixExpression) {
-    char *string = malloc(1024); // <-- изменение на вменяемое число приводит к ОЧЕНЬ странным симптомам
-    // при 0 в какой-то момент, ожидаемо, заполнение залазит на защищенную память. но этого момента довольно стабильно работает
-    // иногда в postfixCalculator подаётся пустая очередь. никакой логической связи с этим методом нет. но фактически, она есть
-    //
-    // при адекватно выделении памяти в out лезет считываемый файл из теста (не имею ни малейшего представления каким образом это связано и как вообще это технически возможно)
+    char *string = malloc(1024); 
     int stringLength = 0;
     while(!isQueueEmpty(postfixExpression)) {
         string[stringLength] = (char)dequeue(postfixExpression);

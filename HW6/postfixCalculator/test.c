@@ -78,9 +78,8 @@ bool validationTest(char *fileNameOfTestFile) {
     int countOfTests = 0;
     testingElement *tests = loadTestingFile(fileNameOfTestFile, &countOfTests);
     for (int i = 0; i < countOfTests; ++i) {
-        printf("started %d (%d) [%s]\n", i, tests[i].expressionValue, tests[i].postfix);
         char *postfixGenerated = postfixExpressionToString(sortingMachine(tests[i].infix));
-        int valueCalculatedByString = postfixCalculator(tests[i].postfix);
+        int valueCalculatedByString = postfixCalculator(postfixGenerated); // = postfixCalculator(tests[i].postfix);
         int valueCalculatedByQueue = calculator(tests[i].infix);
         if (strcmp(postfixGenerated, tests[i].postfix) != 0 || valueCalculatedByString != tests[i].expressionValue || valueCalculatedByQueue != tests[i].expressionValue) {
             printf("==ER INFIX = %s -=-=-=-=-\n", tests[i].infix);
@@ -88,8 +87,6 @@ bool validationTest(char *fileNameOfTestFile) {
             printf("==   Calculated(str): %d [Expected: %d]\n", valueCalculatedByString, tests[i].expressionValue);
             printf("==   Calculated(que): %d [Expected: %d]\n", valueCalculatedByQueue, tests[i].expressionValue);
             isTestSuccesful = false;
-        } else {
-            puts("Success.");
         }
         free(postfixGenerated);
     }
@@ -97,7 +94,3 @@ bool validationTest(char *fileNameOfTestFile) {
     puts(isTestSuccesful ? "Test successfully passed." : "Test failed.");
     return isTestSuccesful;
 }
-// (4 * (2 + 3) - (5 / 1))
-// (20 + 30) * (13 + 27) / 10
-// 500 + 900 / 45 * 20
-// 80 + (5 * 40) - (56 / 8)
