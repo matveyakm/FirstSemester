@@ -11,6 +11,7 @@ typedef struct Element {
 struct Queue {
     Element *front;
     Element *rear;
+    int type;
 };
 
 static void *createElement(int value) {
@@ -21,7 +22,8 @@ static void *createElement(int value) {
 }
 
 Queue *createQueue() {
-    Queue *queue = calloc(sizeof(Element), sizeof(Queue));
+    Queue *queue = malloc(sizeof(Queue));
+    queue->type = 2;
     return queue;
 }
 
@@ -31,7 +33,6 @@ bool isQueueEmpty(Queue *queue) {
 
 void enqueue(Queue *queue, int value) {
     Element *newElement = createElement(value);
-
     if (isQueueEmpty(queue)) {
         queue->front = newElement;
     } else {
@@ -50,7 +51,6 @@ int dequeue(Queue *queue) {
     if (queue->front == NULL) {
         queue->rear = NULL;
     }
-    free(temp);
     return value;
 }
 

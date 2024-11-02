@@ -19,7 +19,7 @@ static void *createElement(int value) {
 }
 
 Stack *createStack() {
-    Stack *stack = calloc(sizeof(StackElement), sizeof(Stack));
+    Stack *stack = malloc(sizeof(Stack));
     return stack;
 }
 
