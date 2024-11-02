@@ -31,7 +31,7 @@ bool isExpectedSymbol(char token) {
     return false;
 }
 
-Stack *postfixExpressionParser(void *rawPostfixExpression) {
+Queue *postfixExpressionParser(void *rawPostfixExpression) {
     if (!isString(rawPostfixExpression)) {
         return (Queue *)rawPostfixExpression;
     }

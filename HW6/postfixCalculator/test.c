@@ -91,9 +91,13 @@ bool validationTest(char *fileNameOfTestFile) {
         } else {
             puts("Success.");
         }
+        free(postfixGenerated);
     }
     free(tests);
     puts(isTestSuccesful ? "Test successfully passed." : "Test failed.");
     return isTestSuccesful;
 }
 // (4 * (2 + 3) - (5 / 1))
+// (20 + 30) * (13 + 27) / 10
+// 500 + 900 / 45 * 20
+// 80 + (5 * 40) - (56 / 8)

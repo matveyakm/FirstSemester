@@ -6,7 +6,7 @@
 #include "../../localLibs/queue/queueDeclaration.h"
 
 bool isPriorityOfThisOperatorIsBigger(int thisOperator, int anotherOperator) {
-    return (thisOperator == '*' || thisOperator == "/") > (anotherOperator == '*' || anotherOperator == "/");
+    return (thisOperator == '*' || thisOperator == '/') > (anotherOperator == '*' || anotherOperator == '/');
 }
 
 Queue *sortingMachine(char *infixExpession) {
@@ -58,12 +58,17 @@ Queue *sortingMachine(char *infixExpession) {
 }
 
 char *postfixExpressionToString(Queue *postfixExpression) {
-    char *string = malloc(0); //
+    char *string = malloc(1024); // <-- изменение на вменяемое число приводит к ОЧЕНЬ странным симптомам
+    // при 0 в какой-то момент, ожидаемо, заполнение залазит на защищенную память. но этого момента довольно стабильно работает
+    // иногда в postfixCalculator подаётся пустая очередь. никакой логической связи с этим методом нет. но фактически, она есть
+    //
+    // при адекватно выделении памяти в out лезет считываемый файл из теста (не имею ни малейшего представления каким образом это связано и как вообще это технически возможно)
     int stringLength = 0;
     while(!isQueueEmpty(postfixExpression)) {
         string[stringLength] = (char)dequeue(postfixExpression);
         ++stringLength;
     }
+    string[stringLength] = '\0';
     deleteQueue(postfixExpression);
     return string;
 }
