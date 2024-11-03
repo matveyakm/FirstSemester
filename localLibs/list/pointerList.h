@@ -13,6 +13,7 @@ void *turnPopPtr(PtrList *list); // turning back a pointer at allocated memory. 
 void popAtPtr(PtrList *list, int position); // can only remove an element and free it
 void *turnPopAtPtr(PtrList *list, int position); // turning back a pointer at allocated memory. be careful
 void *peekPtr(PtrList *list, int position); // do not free memory pointed by return of this method
+void swapPtr(PtrList *list, int firstIndex, int secondIndex); // swaps data of two elements
 void **ptrListToArray(PtrList *list);
 PtrList *arrayToPtrList(void **array, int arrayLength);
 void deletePtrList(PtrList *list);

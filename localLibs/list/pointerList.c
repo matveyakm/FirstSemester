@@ -39,6 +39,15 @@ static int convertPosition(int length,int position) {
     return position >= 0 ? position % length : position % length + length;
 }
 
+static void sortTwoInts(int *first, int *second) {
+    if (first < second) {
+        return;
+    }
+    int temp = *first;
+    *first = *second;
+    *second = temp;
+}
+
 void appendPtr(PtrList *list, void *data) {
     Node *newNode = createNode(data);
 
@@ -144,6 +153,23 @@ void *peekPtr(PtrList *list, int position) {
     return current->data;
 }
 
+void swapPtr(PtrList *list, int firstIndex, int secondIndex) {
+    firstIndex = convertPosition(list->length, firstIndex);
+    secondIndex = convertPosition(list->length, secondIndex);
+    sortTwoInts(&firstIndex, &secondIndex);
+    Node *smaller;
+    Node *bigger;
+    for (int i = 0; i < secondIndex; ++i) {
+        bigger = bigger->next;
+        if (i == firstIndex) {
+            smaller = bigger;
+        }
+    }
+    void *temp = smaller->data;
+    smaller->data = bigger->data;
+    bigger->data = temp;
+}
+
 void **ptrListToArray(PtrList *list) {
     const int length = list->length;
     if (length < 1) {
@@ -165,7 +191,6 @@ PtrList *arrayToPtrList(void **array, int arrayLength) {
     free(array);
     return list;
 }
-
 void deletePtrList(PtrList *list) {
     while (list->length > 0) {
         popPtr(list);
