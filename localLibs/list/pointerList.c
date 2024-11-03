@@ -1,37 +1,37 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "listDeclaration.h"
+#include "pointerList.h"
 
 typedef struct Node {
-    int value;
+    void *data;
     struct Node *next;
 } Node;
 
-struct List {
+struct PtrList {
     Node *head;
     int length;
     int type;
 };
 
-List *createList(int length) {
-    List* list = malloc(sizeof(List));
+PtrList *createPtrList(int length) {
+    PtrList* list = malloc(sizeof(PtrList));
     list->head = NULL;
     list->length = 0;
-    list->type = 3;
+    list->type = 5;
     while (list->length < length) {
-        append(list, 0);
+        appendPtr(list, NULL);
     }
     return list;
 }
 
-static Node *createNode(int value) {
+static Node *createNode(void *data) {
     Node *newNode = malloc(sizeof(Node));
-    newNode->value = value;
+    newNode->data = data;
     newNode->next = NULL;
     return newNode;
 }
 
-int listLength(List *list) {
+int ptrListLength(PtrList *list) {
     return list->length;
 }
 
@@ -39,8 +39,8 @@ static int convertPosition(int length,int position) {
     return position >= 0 ? position % length : position % length + length;
 }
 
-void append(List *list, int value) {
-    Node *newNode = createNode(value);
+void appendPtr(PtrList *list, void *data) {
+    Node *newNode = createNode(data);
 
     if (list->head == NULL) {
         list->head = newNode;
@@ -54,13 +54,13 @@ void append(List *list, int value) {
     ++list->length;
 }
 
-void pushAt(List *list, int position, int value) {
+void pushPtr(PtrList *list, int position, void *data) {
     if (position > list->length) {
         return;
     }
     position = convertPosition(list->length, position);
 
-    Node *newNode = createNode(value);
+    Node *newNode = createNode(data);
     if (position == 0) {
         newNode->next = list->head;
         list->head = newNode;
@@ -74,15 +74,17 @@ void pushAt(List *list, int position, int value) {
     }
     ++list->length;
 }
-
-int popL(List *list) {
+void popPtr(PtrList *list) {
+    free(turnPopPtr(list));
+}
+void *turnPopPtr(PtrList *list) {
     if (list->head == NULL) {
-        return -1;
+        return NULL;
     }
 
-    int removableNodeValue;
+    void *removableNodeValue;
     if (list->head->next == NULL) {
-        removableNodeValue = list->head->value;
+        removableNodeValue = list->head->data;
         free(list->head);
         list->head = NULL;
     } else {
@@ -90,7 +92,7 @@ int popL(List *list) {
         while (current->next->next != NULL) {
             current = current->next;
         }
-        removableNodeValue = current->next->value;
+        removableNodeValue = current->next->data;
         free(current->next);
         current->next = NULL;
     }
@@ -98,17 +100,21 @@ int popL(List *list) {
     return removableNodeValue;
 }
 
-int popAt(List *list, int position) {
+void popAtPtr(PtrList *list, int position) {
+    free(turnPopAtPtr(list, position));
+}
+
+void *turnPopAtPtr(PtrList *list, int position) {
     if (position >= list->length) {
-        return -1;
+        return NULL;
     }
     position = convertPosition(list->length, position);
 
-    int removableNodeValue;
+    void *removableNodeValue;
     Node* temp;
     if (position == 0) {
         temp = list->head;
-        removableNodeValue = temp->value;
+        removableNodeValue = temp->data;
         list->head = list->head->next;
         free(temp);
     } else {
@@ -117,7 +123,7 @@ int popAt(List *list, int position) {
             current = current->next;
         }
         temp = current->next;
-        removableNodeValue = temp->value;
+        removableNodeValue = temp->data;
         current->next = temp->next;
         free(temp);
     }
@@ -125,9 +131,9 @@ int popAt(List *list, int position) {
     return removableNodeValue;
 }
 
-int peekAt(List *list, int position) {
+void *peekPtr(PtrList *list, int position) {
     if (position >= list->length) {
-        return -1; 
+        return NULL; 
     }
     position = convertPosition(list->length, position);
 
@@ -135,46 +141,34 @@ int peekAt(List *list, int position) {
     for (int i = 0; i < position; ++i) {
         current = current->next;
     }
-    return current->value;
+    return current->data;
 }
 
-void printList(List *list) {
-    if (list->length < 1) {
-        puts("[]");
-        return;
-    }
-    printf("[");
-    for (int i = 0; i < list->length - 1; ++i) {
-        printf("%d, ", peekAt(list, i));
-    }
-    printf("%d]\n", peekAt(list, list->length - 1));
-}
-
-int *listToArray(List *list) {
+void **ptrListToArray(PtrList *list) {
     const int length = list->length;
     if (length < 1) {
         return NULL;
     }
-    int *array = malloc(length * sizeof(int));
+    void **array = malloc(length * sizeof(void*));
     for (int i = length - 1; i >= 0; --i) {
-        array[i] = popL(list);
+        array[i] = turnPopPtr(list);
     }
-    deleteList(list);
+    deletePtrList(list);
     return array;
 }
 
-List *arrayToList(int *array, int arrayLength) {
-    List *list = createList(0);
+PtrList *arrayToPtrList(void **array, int arrayLength) {
+    PtrList *list = createPtrList(0);
     for (int i = 0; i < arrayLength; ++i) {
-        append(list, array[i]);
+        appendPtr(list, array[i]);
     }
     free(array);
     return list;
 }
 
-void deleteList(List *list) {
+void deletePtrList(PtrList *list) {
     while (list->length > 0) {
-        popL(list);
+        popPtr(list);
     }
     free(list);
 }

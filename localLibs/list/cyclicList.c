@@ -9,7 +9,7 @@ typedef struct Node {
 
 struct Cyclic {
     Node *head;
-    unsigned int length;
+    int length;
     int type;
 };
 
@@ -19,7 +19,7 @@ Cyclic *createCyclic(int length) {
     cyclic->length = 0;
     cyclic->type = 4;
     while (cyclic->length < length) {
-        append(cyclic, 0);
+        appendC(cyclic, 0);
     }
     return cyclic;
 }
@@ -134,10 +134,10 @@ int peekAtC(Cyclic *cyclic, int position) {
     return current->value;
 }
 
-void shiftHead(Cyclic *cyclic, int position) {
-    position = convertPosition(cyclic->length, position);
+void shiftHead(Cyclic *cyclic, int shift) {
+    shift = convertPosition(cyclic->length, shift);
     Node *current = cyclic->head;
-    for (int i = 0; i < position - 1; ++i) {
+    for (int i = 0; i < shift; ++i) {
         current = current->next;
     }
     cyclic->head = current;
@@ -148,7 +148,7 @@ void printCyclic(Cyclic *cyclic) {
         puts("[]");
         return;
     }
-    printf("[.. ,");
+    printf("[.. , ");
     for (int i = 0; i < cyclic->length - 1; ++i) {
         printf("%d, ", peekAtC(cyclic, i));
     }
