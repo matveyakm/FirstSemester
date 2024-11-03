@@ -51,6 +51,7 @@ int dequeue(Queue *queue) {
     if (queue->front == NULL) {
         queue->rear = NULL;
     }
+    free(temp);
     return value;
 }
 
@@ -65,5 +66,5 @@ void deleteQueue(Queue *queue) {
     while (!isQueueEmpty(queue)) {
         dequeue(queue);
     }
-    free(queue); //
+    free(queue); 
 }
