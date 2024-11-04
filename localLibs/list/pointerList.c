@@ -40,7 +40,7 @@ static int convertPosition(int length,int position) {
 }
 
 static void sortTwoInts(int *first, int *second) {
-    if (first < second) {
+    if (*first <= *second) {
         return;
     }
     int temp = *first;
@@ -157,13 +157,14 @@ void swapPtr(PtrList *list, int firstIndex, int secondIndex) {
     firstIndex = convertPosition(list->length, firstIndex);
     secondIndex = convertPosition(list->length, secondIndex);
     sortTwoInts(&firstIndex, &secondIndex);
-    Node *smaller;
-    Node *bigger;
+
+    Node *smaller = list->head;
+    Node *bigger = list->head;
     for (int i = 0; i < secondIndex; ++i) {
-        bigger = bigger->next;
         if (i == firstIndex) {
             smaller = bigger;
         }
+        bigger = bigger->next;
     }
     void *temp = smaller->data;
     smaller->data = bigger->data;
@@ -191,6 +192,19 @@ PtrList *arrayToPtrList(void **array, int arrayLength) {
     free(array);
     return list;
 }
+
+PtrList *representPtrList(PtrList *initialList) {
+    PtrList *copyList = createPtrList(initialList->length);
+    Node *initialNode = initialList->head;
+    Node *copyNode = copyList->head;
+    for (int i = 0; i < initialList->length; ++i) {
+        copyNode->data = initialNode->data;
+        initialNode = initialNode->next;
+        copyNode = copyNode->next;
+    }
+    return copyList;
+}
+
 void deletePtrList(PtrList *list) {
     while (list->length > 0) {
         popPtr(list);

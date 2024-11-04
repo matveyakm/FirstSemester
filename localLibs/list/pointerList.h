@@ -17,3 +17,7 @@ void swapPtr(PtrList *list, int firstIndex, int secondIndex); // swaps data of t
 void **ptrListToArray(PtrList *list);
 PtrList *arrayToPtrList(void **array, int arrayLength);
 void deletePtrList(PtrList *list);
+
+// this function creates a new representation of previously allocated memory.
+// you have to use free(ptrList) to delete a representation OR deletePtrList(ptrList) to free memory of contents
+PtrList *representPtrList(PtrList *initialList);
