@@ -1,17 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "pointerList.h"
+#include "pointerList_internal.h"
 
-typedef struct Node {
-    void *data;
-    struct Node *next;
-} Node;
-
-struct PtrList {
-    Node *head;
-    int length;
-    int type;
-};
 
 PtrList *createPtrList(int length) {
     PtrList* list = malloc(sizeof(PtrList));
