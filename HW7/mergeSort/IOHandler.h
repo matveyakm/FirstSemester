@@ -1,3 +1,3 @@
 #pragma once
 
-void startProcessing();
+void startProcessing(char *fileName);

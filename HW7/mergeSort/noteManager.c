@@ -22,7 +22,7 @@ PtrList *loadFromFile(char *fileName, int *maxLengthOfName) {
         return fileNotes;
     }
 
-    size_t readingBufferSize = 256;
+    size_t readingBufferSize = 512;
     char *readingBuffer = NULL;
 
     char name[128];
