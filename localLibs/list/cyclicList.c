@@ -55,7 +55,7 @@ static int convertPosition(int length,int position) {
     return position >= 0 ? position % length : position % length + length;
 }
 
-void pushAtC(Cyclic *cyclic, int position, int value) {
+void addC(Cyclic *cyclic, int position, int value) {
     position = convertPosition(cyclic->length, position);
 
     Node *newNode = createNode(value);
@@ -83,7 +83,7 @@ int popC(Cyclic *cyclic) {
     }
 
     int removableNodeValue;
-    if (cyclic->head->next == cyclic->head) {
+    if (cyclic->head->next == cyclic->head) { //
         removableNodeValue = cyclic->head->value;
         free(cyclic->head);
         cyclic->head = NULL;
@@ -93,8 +93,9 @@ int popC(Cyclic *cyclic) {
             current = current->next;
         }
         removableNodeValue = current->next->value;
-        free(current->next);
+        //
         current->next = cyclic->head;
+        free(current->next);
     }
     --cyclic->length;
     return removableNodeValue;
@@ -102,13 +103,17 @@ int popC(Cyclic *cyclic) {
 
 int popAtC(Cyclic *cyclic, int position) {
     position = convertPosition(cyclic->length, position);
-
     int removableNodeValue;
-    Node* temp;
-    if (position == 0) {
+    Node *temp;
+    if (position == 0) { //
+        Node *tail = cyclic->head;
+        for (int i = 0; i < cyclic->length; ++i) {
+            tail = tail->next;
+        }
         temp = cyclic->head;
         removableNodeValue = temp->value;
         cyclic->head = cyclic->head->next;
+        tail->next = cyclic->head;
         free(temp);
     } else {
         Node *current = cyclic->head;
@@ -124,7 +129,7 @@ int popAtC(Cyclic *cyclic, int position) {
     return removableNodeValue;
 }
 
-int peekAtC(Cyclic *cyclic, int position) {
+int peekC(Cyclic *cyclic, int position) {
     position = convertPosition(cyclic->length, position);
 
     Node *current = cyclic->head;
@@ -150,9 +155,9 @@ void printCyclic(Cyclic *cyclic) {
     }
     printf("[.. , ");
     for (int i = 0; i < cyclic->length - 1; ++i) {
-        printf("%d, ", peekAtC(cyclic, i));
+        printf("%d, ", peekC(cyclic, i));
     }
-    printf("%d, ..]\n", peekAtC(cyclic, cyclic->length - 1));
+    printf("%d, ..]\n", peekC(cyclic, cyclic->length - 1));
 }
 
 int *cyclicToArray(Cyclic *cyclic) {
@@ -164,7 +169,7 @@ int *cyclicToArray(Cyclic *cyclic) {
     for (int i = length - 1; i >= 0; --i) {
         array[i] = popC(cyclic);
     }
-    deleteCyclic(cyclic);
+    clearCyclic(cyclic);
     return array;
 }
 
@@ -177,7 +182,7 @@ Cyclic *arrayToCyclic(int *array, int arrayLength) {
     return cyclic;
 }
 
-void deleteCyclic(Cyclic *cyclic) {
+void clearCyclic(Cyclic *cyclic) {
     while (cyclic->length > 0) {
         popC(cyclic);
     }

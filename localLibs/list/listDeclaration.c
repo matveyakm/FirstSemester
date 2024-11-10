@@ -39,7 +39,7 @@ static int convertPosition(int length,int position) {
     return position >= 0 ? position % length : position % length + length;
 }
 
-void append(List *list, int value) {
+void appendL(List *list, int value) {
     Node *newNode = createNode(value);
 
     if (list->head == NULL) {
@@ -54,7 +54,7 @@ void append(List *list, int value) {
     ++list->length;
 }
 
-void pushAt(List *list, int position, int value) {
+void addL(List *list, int position, int value) {
     if (position > list->length) {
         return;
     }
@@ -98,7 +98,7 @@ int popL(List *list) {
     return removableNodeValue;
 }
 
-int popAt(List *list, int position) {
+int popAtL(List *list, int position) {
     if (position >= list->length) {
         return -1;
     }
@@ -125,7 +125,7 @@ int popAt(List *list, int position) {
     return removableNodeValue;
 }
 
-int peekAt(List *list, int position) {
+int peekL(List *list, int position) {
     if (position >= list->length) {
         return -1; 
     }

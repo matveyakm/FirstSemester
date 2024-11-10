@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "queueDeclaration.h"
+#define QUEUE_INCLUDED
 
 typedef struct Element {
     int value;
@@ -62,7 +63,7 @@ int peekQueue(Queue *queue) {
     return queue->front->value;
 }
 
-void deleteQueue(Queue *queue) {
+void clearQueue(Queue *queue) {
     while (!isQueueEmpty(queue)) {
         dequeue(queue);
     }

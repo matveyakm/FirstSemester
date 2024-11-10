@@ -1,6 +1,7 @@
 #pragma once
 #include <stdio.h>
 #include <stdlib.h>
+#define PTRLIST_INCLUDED
 
 typedef struct PtrList PtrList;
 

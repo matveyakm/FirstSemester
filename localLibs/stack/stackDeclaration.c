@@ -9,6 +9,7 @@ typedef struct StackElement {
 
 struct Stack {
     StackElement *head;
+    int type;
 };
 
 static void *createElement(int value) {
@@ -20,6 +21,7 @@ static void *createElement(int value) {
 
 Stack *createStack() {
     Stack *stack = malloc(sizeof(Stack));
+    stack->type = 1;
     return stack;
 }
 
@@ -45,7 +47,7 @@ int pop(Stack *stack) {
     return removableElement;
 }
 
-void deleteStack(Stack *stack) {
+void clearStack(Stack *stack) {
     while (!isStackEmpty(stack)) {
         pop(stack);
     }
