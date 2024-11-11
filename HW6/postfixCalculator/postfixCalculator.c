@@ -5,20 +5,8 @@
 #include "../../localLibs/stack/stackDeclaration.h"
 #include "../../localLibs/queue/queueDeclaration.h"
 #include "sortingStation.h"
-
-bool isString(void *container) { // =)
-    if (container == NULL) {
-        return false;
-    }
-    char *str = (char *)container;
-    while (*str) {  
-        if (*str < 32 || *str > 126) {
-            return false;
-        }
-        str++;
-    }
-    return true; 
-}
+#define PASSED_EXPESSION_IS_INCORRECT 10
+#define PASSED_QUEUE_IS_EMPTY 11
 
 const char expectedSymbols[] = "*+-/ 0123456789";
 
@@ -32,9 +20,6 @@ bool isExpectedSymbol(char token) {
 }
 
 Queue *postfixExpressionParser(void *rawPostfixExpression) {
-    if (!isString(rawPostfixExpression)) {
-        return (Queue *)rawPostfixExpression;
-    }
     Queue *queue = createQueue();
     char *string = (char *)rawPostfixExpression;
     int stringLength = strlen(rawPostfixExpression);
@@ -64,7 +49,6 @@ bool calculate(Stack *operands, char operator) {
             return true;
         case '/':
             if (tempValue == 0) {
-                puts("Division by zero.");
                 return false;
             } else {
                 push(operands, pop(operands) / tempValue);
@@ -76,8 +60,7 @@ bool calculate(Stack *operands, char operator) {
 
 }
 
-int postfixCalculator(void *rawPostfixExpression) {
-    Queue *postfixExpression = postfixExpressionParser(rawPostfixExpression);
+int queuePostfixCalculator(Queue *postfixExpression, int *errorCode) {
     Stack *operands = createStack(); // it is going to keep numbers in the int form, not in ascii
     bool nextNumberParsing = true;
     bool isQueuePassedEmpty = isQueueEmpty(postfixExpression);
@@ -91,39 +74,44 @@ int postfixCalculator(void *rawPostfixExpression) {
                 } else {
                     push(operands, pop(operands) * 10 + (int)token - 48);
                 }
-            } else if (token == ' ' ) {
+            } else if (token == ' ') {
                 nextNumberParsing = true;
             } else {
                 nextNumberParsing = true;
                 if (!calculate(operands, token)) {
-                    puts("Calculation failed. ERR=10");
+                    *errorCode = PASSED_EXPESSION_IS_INCORRECT;
                     deleteStack(operands);
-                    deleteQueue(postfixExpression);//
+                    deleteQueue(postfixExpression);
                     return 0;
                 }
             }
         }
     }
     if (isStackEmpty(operands)) {
-        puts(isQueuePassedEmpty ? "Calculation failed. ERR=111" : "Calculation failed. ERR=110");
+        *errorCode = isQueuePassedEmpty ? PASSED_QUEUE_IS_EMPTY : PASSED_EXPESSION_IS_INCORRECT;
         deleteStack(operands);
-        deleteQueue(postfixExpression);//
+        deleteQueue(postfixExpression);
         return 0;
     }
     int resultValue = pop(operands);
     if (!isStackEmpty(operands)) {
-        puts("Calculation failed. ERR=12");
+        *errorCode = PASSED_EXPESSION_IS_INCORRECT;
         deleteStack(operands);
-        deleteQueue(postfixExpression);//
+        deleteQueue(postfixExpression);
         return 0;
     } else {
         deleteStack(operands);
-        deleteQueue(postfixExpression);//
+        deleteQueue(postfixExpression);
         return resultValue;
     }
 }
 
-int calculator(char *infixExpression) {
-    Queue *postfixQueue = sortingMachine(infixExpression);
-    return postfixCalculator(postfixQueue);
+int stringPostfixCalculator(char *rawPostfixExpression, int *errorCode) {
+    Queue *postfixExpression = postfixExpressionParser(rawPostfixExpression);
+    return queuePostfixCalculator(postfixExpression, errorCode);
+}
+
+int calculator(char *infixExpression, int *errorCode) {
+    Queue *postfixQueue = sortingMachine(infixExpression, errorCode);
+    return queuePostfixCalculator(postfixQueue, errorCode);
 }

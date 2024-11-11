@@ -74,13 +74,14 @@ testingElement *loadTestingFile(char *fileName, int *countOfTests) {
 }
 
 bool validationTest(char *fileNameOfTestFile) {
+    int errorCode = 0;
     bool isTestSuccesful = true;
     int countOfTests = 0;
     testingElement *tests = loadTestingFile(fileNameOfTestFile, &countOfTests);
     for (int i = 0; i < countOfTests; ++i) {
-        char *postfixGenerated = postfixExpressionToString(sortingMachine(tests[i].infix));
-        int valueCalculatedByString = postfixCalculator(postfixGenerated); // = postfixCalculator(tests[i].postfix);
-        int valueCalculatedByQueue = calculator(tests[i].infix);
+        char *postfixGenerated = postfixExpressionToString(sortingMachine(tests[i].infix, &errorCode));
+        int valueCalculatedByString = stringPostfixCalculator(postfixGenerated, &errorCode); // = postfixCalculator(tests[i].postfix);
+        int valueCalculatedByQueue = calculator(tests[i].infix, &errorCode);
         if (strcmp(postfixGenerated, tests[i].postfix) != 0 || valueCalculatedByString != tests[i].expressionValue || valueCalculatedByQueue != tests[i].expressionValue) {
             printf("==ER INFIX = %s -=-=-=-=-\n", tests[i].infix);
             printf("==   Generated: %s [Expected: %s]\n", postfixGenerated, tests[i].postfix);
@@ -90,6 +91,7 @@ bool validationTest(char *fileNameOfTestFile) {
         }
         free(postfixGenerated);
     }
+    isTestSuccesful *= errorCode == 0;
     free(tests);
     puts(isTestSuccesful ? "Test successfully passed." : "Test failed.");
     return isTestSuccesful;

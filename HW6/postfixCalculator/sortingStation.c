@@ -4,19 +4,18 @@
 #include <stdbool.h>
 #include "../../localLibs/stack/stackDeclaration.h"
 #include "../../localLibs/queue/queueDeclaration.h"
+#define PASSED_EXPRESSION_IS_INCORRECT 20
 
 int priorityOfOperator(char thisOpeartor) {
     if (thisOpeartor == '+' || thisOpeartor == '-') {
         return 0;
-    } else if (thisOpeartor == '/') {
-        return 1;
-    } else if (thisOpeartor == '*') {
+    } else if (thisOpeartor == '/' || thisOpeartor == '*') {
         return 1;
     }
     return -1;
 }
 
-Queue *sortingMachine(char *infixExpession) {
+Queue *sortingMachine(char *infixExpession, int *errorCode) {
     Queue *postfixExpression = createQueue();
     Stack *operators = createStack();
     bool isExpressionCorrect = true;
@@ -57,7 +56,7 @@ Queue *sortingMachine(char *infixExpession) {
     deleteStack(operators);
     
     if (!isExpressionCorrect) {
-        puts("Passed expression is not correct!");
+        *errorCode = PASSED_EXPRESSION_IS_INCORRECT;
         deleteQueue(postfixExpression);
         postfixExpression = createQueue();
     }
