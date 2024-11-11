@@ -17,6 +17,7 @@ CFLAGS = -Wall -Wextra -std=c11 $(TEST_FLAGS)
 SRC = main.c \
       inputHandler.c \
       noteManager.c \
+      test.c \
       ../../localLibs/arrayFuncs/arrayFuncs.c \
       ../../localLibs/binSearch/binSearch.c \
       ../../localLibs/bubbleSort/bubbleSort.c \
