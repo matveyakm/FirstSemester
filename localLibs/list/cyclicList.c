@@ -92,10 +92,10 @@ int popC(Cyclic *cyclic) {
         while (current->next->next != cyclic->head) {
             current = current->next;
         }
-        removableNodeValue = current->next->value;
-        //
+        Node *lastNode = current->next;
+        removableNodeValue = lastNode->value;
         current->next = cyclic->head;
-        free(current->next);
+        free(lastNode);
     }
     --cyclic->length;
     return removableNodeValue;
@@ -103,6 +103,7 @@ int popC(Cyclic *cyclic) {
 
 int popAtC(Cyclic *cyclic, int position) {
     position = convertPosition(cyclic->length, position);
+    //printf("todel: %d\n", position);
     int removableNodeValue;
     Node *temp;
     if (position == 0) { //
