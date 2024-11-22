@@ -18,7 +18,7 @@ void fillTestFile(char *fileName) {
             randomString[i] = (char)(rand() % 25 + 65);
         }
         randomString[lengthOfName] = '\0';
-        fprintf(file, "%s %ld\n", randomString, rand() % 1000000);
+        fprintf(file, "%s %d\n", randomString, rand() % 1000000);
         --linesLeft;
     }
     fclose(file);
