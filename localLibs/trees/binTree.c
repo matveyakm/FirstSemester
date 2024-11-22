@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include "binTree.h"
+#include "../list/pointerList.h"
 
 typedef struct binTreeNode {
     void *data;
@@ -116,6 +117,26 @@ void printNode(binTreeNode *node, char *(*convertDataToString)(void *)) {
     printNodeRecursive(node, convertDataToString, 0);
 }
 
+static void fillListRecursive(PtrList *list, binTreeNode *node) {
+    if (!node) {
+        return;
+    }
+    appendPtr(list, node->data);
+    printf("125LB: %d", ptrListLength(list));
+    fillListRecursive(list, node->left);
+    fillListRecursive(list, node->right);
+}
+
+PtrList *binTreeToPtrList(binTreeNode *node) {
+    if (node == NULL) {
+        return NULL;
+    }
+    PtrList *list = createPtrList(0);
+    puts("IN");
+    fillListRecursive(list, node);
+    return list;
+}
+
 // BST Utils
 typedef enum {
     ADD,
@@ -160,7 +181,11 @@ binTreeNode *interactWithBST(binTreeNode *node, void *data, int (*compare)(void 
 }
 
 binTreeNode *addToBST(binTreeNode *node, void *data, int (*compare)(void *, void *)) {
-    if (!data || !node) {
+    if (!node) {
+        node = createNode(data);
+        return node;
+    }
+    if (!data) {
         return NULL;
     }
     return interactWithBST(node, data, compare, ADD);
@@ -178,29 +203,25 @@ bool freeFromBST(binTreeNode *node, void *data, int (*compare)(void *, void *)) 
         return false;
     }
 
-    // Найти узел для удаления
     binTreeNode *targetNode = interactWithBST(node, data, compare, FIND);
     if (!targetNode) {
-        return false; // Узел не найден
+        return false;
     }
 
-    // Если узел - лист
     if (!targetNode->left && !targetNode->right) {
-        free(targetNode->data); // Освобождаем память для data
-        free(targetNode);      // Удаляем узел
+        free(targetNode->data);
+        free(targetNode);      
         return true;
     }
 
-    // Если узел имеет только одного потомка
     if (!targetNode->left || !targetNode->right) {
         binTreeNode *child = targetNode->left ? targetNode->left : targetNode->right;
-        free(targetNode->data); // Освобождаем память для data
-        *targetNode = *child;   // Перемещаем данные и потомки
-        free(child);            // Удаляем потомка
+        free(targetNode->data);
+        *targetNode = *child;
+        free(child);
         return true;
     }
-    // Если узел имеет двух потомков
-    // Ищем минимальный узел в правом поддереве
+
     binTreeNode *minNodeParent = targetNode;
     binTreeNode *minNode = targetNode->right;
     while (minNode->left) {
@@ -208,16 +229,14 @@ bool freeFromBST(binTreeNode *node, void *data, int (*compare)(void *, void *)) 
         minNode = minNode->left;
     }
 
-    // Заменяем данные удаляемого узла
-    free(targetNode->data);      // Освобождаем память текущих данных
-    targetNode->data = minNode->data; // Перемещаем указатель на данные из минимального узла
-    
-    // Удаляем минимальный узел
+    free(targetNode->data);
+    targetNode->data = minNode->data;
+
     if (minNodeParent->left == minNode) {
         minNodeParent->left = minNode->right;
     } else {
         minNodeParent->right = minNode->right;
     }
-    free(minNode); // Освобождаем узел (данные уже перемещены)
+    free(minNode);
     return true;
 }
