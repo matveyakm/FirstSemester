@@ -1,210 +1,223 @@
-#pragma once
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include "binTree.h"
 
-typedef struct Node {
+typedef struct binTreeNode {
     void *data;
-    struct Node *left;
-    struct Node *right;
-} Node;
+    struct binTreeNode *left;
+    struct binTreeNode *right;
+} binTreeNode;
 
-struct BinTree {
-    Node *head;
-    int length;
-    int type;
-};
-
-BinTree *createBinTree() {
-    BinTree* tree = malloc(sizeof(BinTree));
-    tree->head = NULL;
-    tree->length = 0;
-    tree->type = 6;
-    return tree;
-}
-
-static Node *createNode(void *data) {
-    Node *newNode = malloc(sizeof(Node));
+binTreeNode *createNode(void *data) {
+    binTreeNode *newNode = malloc(sizeof(binTreeNode));
     newNode->data = data;
     newNode->right = NULL;
     newNode->left = NULL;
     return newNode;
 }
 
-int binTreeLength(BinTree *tree) {
-    return tree->length;
+void *getNodeData(binTreeNode *node) {
+    if (!node) {
+        return NULL;
+    }
+    return node->data;
 }
 
-static int convertPosition(int length,int position) {
-    return position >= 0 ? position % length : position % length + length;
+void *changeNodeData(binTreeNode *node, void *newData) {
+    if (!node) {
+        return NULL;
+    }
+    void *changingData = node->data;
+    node->data = newData;
+    return changingData;
 }
 
-static void sortTwoInts(int *first, int *second) {
-    if (*first <= *second) {
+void setNodeData(binTreeNode *node, void *newData) {
+    if (!node) {
         return;
     }
-    int temp = *first;
-    *first = *second;
-    *second = temp;
+    node->data = newData;
 }
 
-void appendPtr(PtrList *list, void *data) {
-    Node *newNode = createNode(data);
-
-    if (list->head == NULL) {
-        list->head = newNode;
-    } else {
-        Node *current = list->head;
-        while (current->next != NULL) {
-            current = current->next;
-        }
-        current->next = newNode;
-    }
-    ++list->length;
-}
-
-void pushPtr(PtrList *list, int position, void *data) {
-    if (position > list->length) {
+void addLeftChild(binTreeNode *node, binTreeNode *child) {
+    if (!node || !child || node->left) {
         return;
     }
-    position = convertPosition(list->length, position);
+    node->left = child;
+}
 
-    Node *newNode = createNode(data);
-    if (position == 0) {
-        newNode->next = list->head;
-        list->head = newNode;
-    } else {
-        Node *current = list->head;
-        for (int i = 0; i < position - 1; ++i) {
-            current = current->next;
-        }
-        newNode->next = current->next;
-        current->next = newNode;
+void addRightChild(binTreeNode *node, binTreeNode *child) {
+    if (!node || !child || node->right) {
+        return;
     }
-    ++list->length;
+    node->right = child;
 }
-void popPtr(PtrList *list) {
-    free(turnPopPtr(list));
-}
-void *turnPopPtr(PtrList *list) {
-    if (list->head == NULL) {
+
+binTreeNode *getLeftChild(binTreeNode *node) {
+    if (!node) {
         return NULL;
     }
-
-    void *removableNodeValue;
-    if (list->head->next == NULL) {
-        removableNodeValue = list->head->data;
-        free(list->head);
-        list->head = NULL;
-    } else {
-        Node* current = list->head;
-        while (current->next->next != NULL) {
-            current = current->next;
-        }
-        removableNodeValue = current->next->data;
-        free(current->next);
-        current->next = NULL;
-    }
-    --list->length;
-    return removableNodeValue;
+    return node->left;
 }
 
-void popAtPtr(PtrList *list, int position) {
-    free(turnPopAtPtr(list, position));
-}
-
-void *turnPopAtPtr(PtrList *list, int position) {
-    if (position >= list->length) {
+binTreeNode *getRightChild(binTreeNode *node) {
+    if (!node) {
         return NULL;
     }
-    position = convertPosition(list->length, position);
+    return node->right;
+}
 
-    void *removableNodeValue;
-    Node* temp;
-    if (position == 0) {
-        temp = list->head;
-        removableNodeValue = temp->data;
-        list->head = list->head->next;
-        free(temp);
+void clearNodeRepresent(binTreeNode *node) {
+    if (node->left) {
+        clearNodeRepresent(node->left);
+    }
+    if (node->right) {
+        clearNodeRepresent(node->right);
+    }
+    free(node);
+}
+
+void freeNode(binTreeNode *node) { // !
+    if (node->left) {
+        freeNode(node->left);
+    }
+    if (node->right) {
+        freeNode(node->right);
+    }
+    free(node->data);
+    free(node);
+}
+
+static void printNodeRecursive(binTreeNode *node, char *(*convertDataToString)(void *), int depth) {
+    if (node == NULL) {
+        for (int i = 0; i < depth; ++i) printf("    ");
+        printf("NULL\n");
+        return;
+    }
+
+    for (int i = 0; i < depth; ++i) printf("    ");
+    char *dataStr = convertDataToString(node->data);
+    if (dataStr != NULL) {
+        printf("%s\n", dataStr);
+        //free(dataStr);
     } else {
-        Node* current = list->head;
-        for (int i = 0; i < position - 1; ++i) {
-            current = current->next;
+        printf("NULL\n");
+    }
+    printNodeRecursive(node->left, convertDataToString, depth + 1);
+    printNodeRecursive(node->right, convertDataToString, depth + 1);
+}
+
+void printNode(binTreeNode *node, char *(*convertDataToString)(void *)) {
+    if (node == NULL) {
+        printf("Tree is empty.\n");
+        return;
+    }
+    printNodeRecursive(node, convertDataToString, 0);
+}
+
+// BST Utils
+typedef enum {
+    ADD,
+    FIND
+} variantOfActionInBST;
+
+static void refillWhileFreing(binTreeNode *root, binTreeNode *node, int (*compare)(void *, void *)) {
+    if (!node) return;
+    addToBST(root, getNodeData(node), compare);
+    refillWhileFreing(root, node->left, compare);
+    refillWhileFreing(root, node->right, compare);
+    free(node);
+}
+
+
+binTreeNode *interactWithBST(binTreeNode *node, void *data, int (*compare)(void *, void *), variantOfActionInBST action) {
+    int resultOfComparing = compare(node->data, data);
+    if (resultOfComparing == 0) {
+        return node;
+    }
+    if (resultOfComparing > 0) {
+        if (!node->left) {
+            if (action == ADD) {
+                addLeftChild(node, createNode(data));
+                return node->left;
+            }
+            return node;
         }
-        temp = current->next;
-        removableNodeValue = temp->data;
-        current->next = temp->next;
-        free(temp);
+        return interactWithBST(node->left, data, compare, action);
     }
-    --list->length;
-    return removableNodeValue;
-}
-
-void *peekPtr(PtrList *list, int position) {
-    if (position >= list->length) {
-        return NULL; 
-    }
-    position = convertPosition(list->length, position);
-
-    Node* current = list->head;
-    for (int i = 0; i < position; ++i) {
-        current = current->next;
-    }
-    return current->data;
-}
-
-void swapPtr(PtrList *list, int firstIndex, int secondIndex) {
-    firstIndex = convertPosition(list->length, firstIndex);
-    secondIndex = convertPosition(list->length, secondIndex);
-    sortTwoInts(&firstIndex, &secondIndex);
-
-    Node *smaller = list->head;
-    Node *bigger = list->head;
-    for (int i = 0; i < secondIndex; ++i) {
-        if (i == firstIndex) {
-            smaller = bigger;
+    if (resultOfComparing < 0) {
+        if (!node->right) {
+            if (action == ADD) {
+                addRightChild(node, createNode(data));
+                return node->right;
+            }
+            return node;
         }
-        bigger = bigger->next;
+        return interactWithBST(node->right, data, compare, action);
     }
-    void *temp = smaller->data;
-    smaller->data = bigger->data;
-    bigger->data = temp;
+    return node;
 }
 
-void **ptrListToArray(PtrList *list) {
-    const int length = list->length;
-    if (length < 1) {
+binTreeNode *addToBST(binTreeNode *node, void *data, int (*compare)(void *, void *)) {
+    if (!data || !node) {
         return NULL;
     }
-    void **array = malloc(length * sizeof(void*));
-    for (int i = length - 1; i >= 0; --i) {
-        array[i] = turnPopPtr(list);
-    }
-    deletePtrList(list);
-    return array;
+    return interactWithBST(node, data, compare, ADD);
 }
 
-PtrList *arrayToPtrList(void **array, int arrayLength) {
-    PtrList *list = createPtrList(0);
-    for (int i = 0; i < arrayLength; ++i) {
-        appendPtr(list, array[i]);
+binTreeNode *findInBST(binTreeNode *node, void *data, int (*compare)(void *, void *)) {
+    if (!data || !node) {
+        return NULL;
     }
-    free(array);
-    return list;
+    return interactWithBST(node, data, compare, FIND);
 }
 
-PtrList *representPtrList(PtrList *initialList) {
-    PtrList *copyList = createPtrList(initialList->length);
-    Node *initialNode = initialList->head;
-    Node *copyNode = copyList->head;
-    for (int i = 0; i < initialList->length; ++i) {
-        copyNode->data = initialNode->data;
-        initialNode = initialNode->next;
-        copyNode = copyNode->next;
+bool freeFromBST(binTreeNode *node, void *data, int (*compare)(void *, void *)) {
+    if (!node || !data) {
+        return false;
     }
-    return copyList;
-}
 
-void deletePtrList(PtrList *list) {
-    while (list->length > 0) {
-        popPtr(list);
+    // Найти узел для удаления
+    binTreeNode *targetNode = interactWithBST(node, data, compare, FIND);
+    if (!targetNode) {
+        return false; // Узел не найден
     }
-    free(list);
+
+    // Если узел - лист
+    if (!targetNode->left && !targetNode->right) {
+        free(targetNode->data); // Освобождаем память для data
+        free(targetNode);      // Удаляем узел
+        return true;
+    }
+
+    // Если узел имеет только одного потомка
+    if (!targetNode->left || !targetNode->right) {
+        binTreeNode *child = targetNode->left ? targetNode->left : targetNode->right;
+        free(targetNode->data); // Освобождаем память для data
+        *targetNode = *child;   // Перемещаем данные и потомки
+        free(child);            // Удаляем потомка
+        return true;
+    }
+    // Если узел имеет двух потомков
+    // Ищем минимальный узел в правом поддереве
+    binTreeNode *minNodeParent = targetNode;
+    binTreeNode *minNode = targetNode->right;
+    while (minNode->left) {
+        minNodeParent = minNode;
+        minNode = minNode->left;
+    }
+
+    // Заменяем данные удаляемого узла
+    free(targetNode->data);      // Освобождаем память текущих данных
+    targetNode->data = minNode->data; // Перемещаем указатель на данные из минимального узла
+    
+    // Удаляем минимальный узел
+    if (minNodeParent->left == minNode) {
+        minNodeParent->left = minNode->right;
+    } else {
+        minNodeParent->right = minNode->right;
+    }
+    free(minNode); // Освобождаем узел (данные уже перемещены)
+    return true;
 }
