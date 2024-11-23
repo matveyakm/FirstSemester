@@ -80,7 +80,7 @@ bool validationTest(char *fileNameOfTestFile) {
     testingElement *tests = loadTestingFile(fileNameOfTestFile, &countOfTests);
     for (int i = 0; i < countOfTests; ++i) {
         char *postfixGenerated = postfixExpressionToString(sortingMachine(tests[i].infix, &errorCode));
-        int valueCalculatedByString = stringPostfixCalculator(postfixGenerated, &errorCode); // = postfixCalculator(tests[i].postfix);
+        int valueCalculatedByString = stringPostfixCalculator(postfixGenerated, &errorCode);
         int valueCalculatedByQueue = calculator(tests[i].infix, &errorCode);
         if (strcmp(postfixGenerated, tests[i].postfix) != 0 || valueCalculatedByString != tests[i].expressionValue || valueCalculatedByQueue != tests[i].expressionValue) {
             printf("==ER INFIX = %s -=-=-=-=-\n", tests[i].infix);
