@@ -82,5 +82,5 @@ int compareNotesByName(void *first, void *second) {
 int compareNotesByPhoneNumber(void *first, void *second) {
     Note *firstNote = (Note *)first;
     Note *secondNote = (Note *)second;
-    return (firstNote->phoneNumber > secondNote->phoneNumber) - (firstNote->phoneNumber < secondNote->phoneNumber);
+    return firstNote->phoneNumber - secondNote->phoneNumber;
 }

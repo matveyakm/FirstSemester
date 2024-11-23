@@ -12,7 +12,7 @@ void fillTestFile(char *fileName) {
 
     char *randomString = malloc(111 * sizeof(char));
     while (linesLeft > 0) {
-        srand(clock());
+        srand(clock() - linesLeft);
         int lengthOfName = rand() % 109 + 1;
         for (int i = 0; i < lengthOfName; ++i) {
             randomString[i] = (char)(rand() % 25 + 65);

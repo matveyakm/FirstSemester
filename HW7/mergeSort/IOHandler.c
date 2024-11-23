@@ -20,7 +20,7 @@ void startProcessing(char *fileName) {
         puts("==Enter a command:");
         if (scanf("%d", &action) != 1) {
             puts("===You can only enter a integer number!===\nExiting...\n");
-            break; // 
+            break;
         }
 
         switch (action) {
