@@ -19,9 +19,9 @@ bool isExpectedSymbol(char token) {
     return false;
 }
 
-Queue *postfixExpressionParser(void *rawPostfixExpression) {
+Queue *postfixExpressionParser(char *rawPostfixExpression) {
     Queue *queue = createQueue();
-    char *string = (char *)rawPostfixExpression;
+    char *string = rawPostfixExpression;
     int stringLength = strlen(rawPostfixExpression);
     for (int i = 0; i < stringLength; ++i) {
         enqueue(queue, string[i]);
@@ -69,10 +69,10 @@ int queuePostfixCalculator(Queue *postfixExpression, int *errorCode) {
         if (isExpectedSymbol(token)) {
             if (token >= '0' && token <= '9') {
                 if (nextNumberParsing || isStackEmpty(operands)) {
-                    push(operands, (int)token - 48);
+                    push(operands, (int)token - '0');
                     nextNumberParsing = false;
                 } else {
-                    push(operands, pop(operands) * 10 + (int)token - 48);
+                    push(operands, pop(operands) * 10 + (int)token - '0');
                 }
             } else if (token == ' ') {
                 nextNumberParsing = true;
@@ -94,16 +94,10 @@ int queuePostfixCalculator(Queue *postfixExpression, int *errorCode) {
         return 0;
     }
     int resultValue = pop(operands);
-    if (!isStackEmpty(operands)) {
-        *errorCode = PASSED_EXPESSION_IS_INCORRECT;
-        deleteStack(operands);
-        deleteQueue(postfixExpression);
-        return 0;
-    } else {
-        deleteStack(operands);
-        deleteQueue(postfixExpression);
-        return resultValue;
-    }
+    *errorCode = isStackEmpty(operands) ? *errorCode : PASSED_EXPESSION_IS_INCORRECT;
+    deleteStack(operands);
+    deleteQueue(postfixExpression);
+    return errorCode == PASSED_EXPESSION_IS_INCORRECT ? 0 : resultValue;
 }
 
 int stringPostfixCalculator(char *rawPostfixExpression, int *errorCode) {
