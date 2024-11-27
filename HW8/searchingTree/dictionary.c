@@ -9,10 +9,10 @@ struct Dictionary {
     binTreeNode *root;
 };
 
-typedef struct Pair {
+struct Pair {
     int key;
     char *data;
-} Pair;
+};
 
 Dictionary *createDictionary() {
     Dictionary *dict = malloc(sizeof(Dictionary));
@@ -38,37 +38,56 @@ int comparePairs(void *a, void *b) {
 
 void addPairToDict(Dictionary *dict, int key, char data[]) {
     Pair *pair = makePair(key, data);
-    addToBST(dict->root, pair, comparePairs);
+    if (!dict->root) {
+        dict->root = createNode(pair);
+    } else {
+        addToBST(dict->root, pair, comparePairs);
+    }
 }
 
 char *getDataByKey(Dictionary *dict, int key) {
-    Pair *pattern = makePair(key, ""); // free?
-    Pair *pair = getNodeData(findInBST(dict->root, pattern, comparePairs));
+    Pair *pattern = makePair(key, "");
+    Pair *pair = (Pair *)getNodeData(findInBST(dict->root, pattern, comparePairs));
+    free(pattern);
     return pair->data;
 }
 
 bool isPairExist(Dictionary *dict, int key) {
-    Pair *pattern = makePair(key, ""); // free?
+    Pair *pattern = makePair(key, "");
     return findInBST(dict->root, pattern, comparePairs) != NULL;
+    free(pattern);//
 }
 
 void clearPair(Dictionary *dict, int key) {
-    Pair *pattern = makePair(key, ""); // free?
+    Pair *pattern = makePair(key, "");
     freeFromBST(dict->root, pattern, comparePairs);
+    //free(pattern); == abort
 }
 
-char *convertPair(void *rawPair) {
-    Pair *pair = (Pair *)rawPair;
-    return pair->data;
+void printPair(Pair *pair) {
+    printf("[%d: %s]\n", pair->key, pair->data);
 }
 
-void printDictionary(Dictionary *dict) {
+char *cnvrt(void *p) { //tmp
+    Pair *pair = (Pair *)p;
+    char *str = malloc((12 + 7 + strlen(pair->data)) * sizeof(char));
+    sprintf(str, "[%d: %s]", pair->key, pair->data);
+    return str;
+}
+
+void printDictionary(Dictionary *dict) { // !!!!!
     /*
     PtrList *list = binTreeToPtrList(dict->root);
-    printf("62LD: %d\n", ptrListLength(list));
     for (int i = 0; i < ptrListLength(list); ++i) {
         Pair *pair = (Pair *)peekPtr(list, i);
-        printf("[%d: %s]\n", pair->key, pair->data);
-    } */
-   printNode(dict->root, convertPair);
+        printPair(pair);
+    } 
+    deletePtrList(list);
+    */
+   printNode(dict->root, cnvrt);
+}
+
+void deleteDictionary(Dictionary *dict) {
+    freeNode(dict->root);
+    free(dict);
 }

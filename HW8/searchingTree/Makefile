@@ -16,6 +16,7 @@ CFLAGS = -Wall -Wextra -std=c11 $(TEST_FLAGS)
 # Файлы исходного кода
 SRC = main.c \
       dictionary.c \
+      IOHandler.c \
       ../../localLibs/arrayFuncs/arrayFuncs.c \
       ../../localLibs/binSearch/binSearch.c \
       ../../localLibs/bubbleSort/bubbleSort.c \
