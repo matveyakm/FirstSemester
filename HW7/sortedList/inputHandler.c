@@ -8,13 +8,13 @@ void startProccesing() {
     List *sortedList = createList(0);
     bool needToLoop = true;
     while (needToLoop) {
-        int action;
+        int action = 52;
         puts("==Enter a command:");
         if (scanf("%d", &action) != 1) {
-            puts("===You can only enter a integer number!===\nExiting...\n");
+            puts("===You can only enter an integer number!===\nExiting...\n");
             break; // 
         }
-        int value;
+        int value = 52;
         switch (action) {
         case 0:
             needToLoop = false;
