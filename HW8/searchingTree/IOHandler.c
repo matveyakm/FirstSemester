@@ -1,9 +1,13 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "dictionary.h"
 
 char *getData(void) {
-    char data[128] = "empty";
-    scanf("%127s", data);
+    char string[128] = "empty";
+    scanf("%127s", string);
+    char *data = malloc(strlen(string) * sizeof(char));
+    strcpy(data, string);
     return data;
 }
 
@@ -31,6 +35,7 @@ void startInterfaceProcessing(void) {
             puts("=Enter a data:");//
             char *data = getData();
             addPairToDict(dict, key, data);
+            free(data);
             break;
 
         case 2: // get data

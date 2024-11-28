@@ -20,7 +20,7 @@ Dictionary *createDictionary() {
     return dict;
 }
 
-static Pair *makePair(int key, char data[]) {
+static Pair *makePair(int key, char *data) {
     char *dataOnHeap = malloc(strlen(data) * sizeof(char));
     strcpy(dataOnHeap, data);
 
@@ -76,15 +76,15 @@ char *cnvrt(void *p) { //tmp
 }
 
 void printDictionary(Dictionary *dict) { // !!!!!
-    /*
+    
     PtrList *list = binTreeToPtrList(dict->root);
     for (int i = 0; i < ptrListLength(list); ++i) {
         Pair *pair = (Pair *)peekPtr(list, i);
         printPair(pair);
     } 
-    deletePtrList(list);
-    */
-   printNode(dict->root, cnvrt);
+    free(list);
+    
+   //printNode(dict->root, cnvrt);
 }
 
 void deleteDictionary(Dictionary *dict) {
