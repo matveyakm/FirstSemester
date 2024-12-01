@@ -41,7 +41,7 @@ void startInterfaceProcessing(void) {
         case 2: // get data
             puts("=Enter a key:");//
             key = getKey();
-            printf("-%d: %s", key, getDataByKey(dict, key));
+            printf("-%d: %s\n", key, getDataByKey(dict, key));
             break;
 
         case 3: // is there

@@ -161,7 +161,7 @@ binTreeNode *interactWithBST(binTreeNode *node, void *data, int (*compare)(void 
                 addLeftChild(node, createNode(data));
                 return node->left;
             }
-            return node;
+            return NULL;
         }
         return interactWithBST(node->left, data, compare, action);
     }
@@ -171,7 +171,7 @@ binTreeNode *interactWithBST(binTreeNode *node, void *data, int (*compare)(void 
                 addRightChild(node, createNode(data));
                 return node->right;
             }
-            return node;
+            return NULL;
         }
         return interactWithBST(node->right, data, compare, action);
     }
@@ -217,7 +217,7 @@ bool freeFromBST(binTreeNode *node, void *data, int (*compare)(void *, void *)) 
         binTreeNode *child = targetNode->left ? targetNode->left : targetNode->right;
         free(targetNode->data);
         *targetNode = *child;
-        free(child);
+        free(child);//
         return true;
     }
 

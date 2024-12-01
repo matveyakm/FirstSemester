@@ -49,42 +49,33 @@ char *getDataByKey(Dictionary *dict, int key) {
     Pair *pattern = makePair(key, "");
     Pair *pair = (Pair *)getNodeData(findInBST(dict->root, pattern, comparePairs));
     free(pattern);
-    return pair->data;
+    return pair == NULL ? "null" : pair->data;
 }
 
 bool isPairExist(Dictionary *dict, int key) {
     Pair *pattern = makePair(key, "");
-    return findInBST(dict->root, pattern, comparePairs) != NULL;
-    free(pattern);//
+    bool res = findInBST(dict->root, pattern, comparePairs) != NULL;
+    free(pattern);
+    return res;
 }
 
 void clearPair(Dictionary *dict, int key) {
     Pair *pattern = makePair(key, "");
     freeFromBST(dict->root, pattern, comparePairs);
-    //free(pattern); == abort
+    free(pattern);
 }
 
 void printPair(Pair *pair) {
     printf("[%d: %s]\n", pair->key, pair->data);
 }
 
-char *cnvrt(void *p) { //tmp
-    Pair *pair = (Pair *)p;
-    char *str = malloc((12 + 7 + strlen(pair->data)) * sizeof(char));
-    sprintf(str, "[%d: %s]", pair->key, pair->data);
-    return str;
-}
-
-void printDictionary(Dictionary *dict) { // !!!!!
-    
+void printDictionary(Dictionary *dict) {
     PtrList *list = binTreeToPtrList(dict->root);
     for (int i = 0; i < ptrListLength(list); ++i) {
         Pair *pair = (Pair *)peekPtr(list, i);
         printPair(pair);
     } 
     free(list);
-    
-   //printNode(dict->root, cnvrt);
 }
 
 void deleteDictionary(Dictionary *dict) {
