@@ -1,7 +1,6 @@
 #pragma once
 #include <stdio.h>
 #include <stdlib.h>
-#define INTLIST_INCLUDED
 
 typedef struct List List;
 

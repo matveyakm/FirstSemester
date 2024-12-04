@@ -101,7 +101,7 @@ static void printNodeRecursive(binTreeNode *node, char *(*convertDataToString)(v
     char *dataStr = convertDataToString(node->data);
     if (dataStr != NULL) {
         printf("%s\n", dataStr);
-        //free(dataStr);
+        free(dataStr);
     } else {
         printf("NULL\n");
     }
@@ -122,7 +122,6 @@ static void fillListRecursive(PtrList *list, binTreeNode *node) {
         return;
     }
     appendPtr(list, node->data);
-    printf("125LB: %d", ptrListLength(list));
     fillListRecursive(list, node->left);
     fillListRecursive(list, node->right);
 }
@@ -132,7 +131,6 @@ PtrList *binTreeToPtrList(binTreeNode *node) {
         return NULL;
     }
     PtrList *list = createPtrList(0);
-    puts("IN");
     fillListRecursive(list, node);
     return list;
 }
@@ -188,6 +186,7 @@ binTreeNode *addToBST(binTreeNode *node, void *data, int (*compare)(void *, void
     if (!data) {
         return NULL;
     }
+    
     return interactWithBST(node, data, compare, ADD);
 }
 

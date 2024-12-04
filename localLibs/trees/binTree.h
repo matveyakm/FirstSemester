@@ -24,5 +24,6 @@ PtrList *binTreeToPtrList(binTreeNode *node);
 
 // BST Utils
 binTreeNode *addToBST(binTreeNode *node, void *data, int (*compare)(void *, void *));
+// returns node of added node
 binTreeNode *findInBST(binTreeNode *node, void *data, int (*compare)(void *, void *));
 bool freeFromBST(binTreeNode *node, void *data, int (*compare)(void *, void *));

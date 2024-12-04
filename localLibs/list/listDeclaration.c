@@ -10,14 +10,12 @@ typedef struct Node {
 struct List {
     Node *head;
     int length;
-    int type;
 };
 
 List *createList(int length) {
     List* list = malloc(sizeof(List));
     list->head = NULL;
     list->length = 0;
-    list->type = 3;
     while (list->length < length) {
         append(list, 0);
     }
