@@ -177,10 +177,9 @@ void printHashMap(HashMap *map) {
     for (unsigned int i = 0; i < map->size; ++i) {
         PtrList *bucket = map->buckets[i];
         if (bucket && ptrListLength(bucket) > 0) {
-            printf("b%d:\n", i);
             for (int j = 0; j < ptrListLength(bucket); ++j) {
                 HashMapEntry *entry = peekPtr(bucket, j);
-                printf(" %s -> %d\n", entry->key, entry->value);
+                printf("[%d] %s -> %d\n", i, entry->key, entry->value);
             }
         }
     }
