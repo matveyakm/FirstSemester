@@ -15,12 +15,16 @@ CFLAGS = -Wall -Wextra -std=c11 $(TEST_FLAGS)
 
 # Файлы исходного кода
 SRC = main.c \
+      IOHandler.c \
+      expressionCalculator.c \
+      test.c \
       ../../localLibs/arrayFuncs/arrayFuncs.c \
       ../../localLibs/binSearch/binSearch.c \
       ../../localLibs/bubbleSort/bubbleSort.c \
       ../../localLibs/insertionSort/insertionSort.c \
       ../../localLibs/qsort/qsort.c \
       ../../localLibs/testingTools/testingTools.c \
+      ../../localLibs/list/pointerList.c \
       ../../localLibs/trees/binTree.c
 
 # Файлы заголовков
@@ -31,6 +35,7 @@ INCLUDES = -I. \
             -I../../localLibs/insertionSort \
             -I../../localLibs/qsort \
             -I../../localLibs/testingTools \
+            -I../../localLibs/list \
             -I../../localLibs/trees
 
 # Компиляция по умолчанию

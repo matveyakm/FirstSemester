@@ -80,6 +80,9 @@ void clearNodeRepresent(binTreeNode *node) {
 }
 
 void freeNode(binTreeNode *node) { // !
+    if (!node) {
+        return;
+    }
     if (node->left) {
         freeNode(node->left);
     }
@@ -88,6 +91,20 @@ void freeNode(binTreeNode *node) { // !
     }
     free(node->data);
     free(node);
+}
+
+void freeLeftChild(binTreeNode *node) {
+    freeNode(node->left);
+    node->left = NULL;
+}
+
+void freeRightChild(binTreeNode *node) {
+    freeNode(node->right);
+    node->right = NULL;
+}
+
+bool isLeaf(binTreeNode *node) {
+    return !node->right && !node->left;
 }
 
 static void printNodeRecursive(binTreeNode *node, char *(*convertDataToString)(void *), int depth) {
@@ -101,7 +118,7 @@ static void printNodeRecursive(binTreeNode *node, char *(*convertDataToString)(v
     char *dataStr = convertDataToString(node->data);
     if (dataStr != NULL) {
         printf("%s\n", dataStr);
-        //free(dataStr);
+        free(dataStr);
     } else {
         printf("NULL\n");
     }
@@ -122,7 +139,6 @@ static void fillListRecursive(PtrList *list, binTreeNode *node) {
         return;
     }
     appendPtr(list, node->data);
-    printf("125LB: %d", ptrListLength(list));
     fillListRecursive(list, node->left);
     fillListRecursive(list, node->right);
 }
@@ -132,7 +148,6 @@ PtrList *binTreeToPtrList(binTreeNode *node) {
         return NULL;
     }
     PtrList *list = createPtrList(0);
-    puts("IN");
     fillListRecursive(list, node);
     return list;
 }
