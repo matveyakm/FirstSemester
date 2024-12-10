@@ -80,6 +80,9 @@ void clearNodeRepresent(binTreeNode *node) {
 }
 
 void freeNode(binTreeNode *node) { // !
+    if (!node) {
+        return;
+    }
     if (node->left) {
         freeNode(node->left);
     }
@@ -88,6 +91,20 @@ void freeNode(binTreeNode *node) { // !
     }
     free(node->data);
     free(node);
+}
+
+void freeLeftChild(binTreeNode *node) {
+    freeNode(node->left);
+    node->left = NULL;
+}
+
+void freeRightChild(binTreeNode *node) {
+    freeNode(node->right);
+    node->right = NULL;
+}
+
+bool isLeaf(binTreeNode *node) {
+    return !node->right && !node->left;
 }
 
 static void printNodeRecursive(binTreeNode *node, char *(*convertDataToString)(void *), int depth) {
