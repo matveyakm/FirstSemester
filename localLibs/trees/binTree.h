@@ -17,6 +17,8 @@ binTreeNode *getRightChild(binTreeNode *node);
 void clearNodeRepresent(binTreeNode *node);
 // clears only a pointer but not the memory
 void freeNode(binTreeNode *node);
+void freeLeftChild(binTreeNode *node);
+void freeRightChild(binTreeNode *node);
 // frees memory than clears the pointer
 void printNode(binTreeNode *node, char *(*convertDataToString)(void *));
 // function you passing must copy pointed content even if content has char* type

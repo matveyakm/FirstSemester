@@ -8,6 +8,7 @@ typedef struct binTreeNode {
     void *data;
     struct binTreeNode *left;
     struct binTreeNode *right;
+    int balance;
 } binTreeNode;
 
 binTreeNode *createNode(void *data) {
@@ -15,7 +16,81 @@ binTreeNode *createNode(void *data) {
     newNode->data = data;
     newNode->right = NULL;
     newNode->left = NULL;
+    newNode->balance = 0;
     return newNode;
+}
+
+// Small right rotation
+binTreeNode *rotateRight(binTreeNode *y) {
+    binTreeNode *x = y->left;
+    binTreeNode *T2 = x->right;
+
+    x->right = y;
+    y->left = T2;
+
+    y->balance = (y->right ? y->right->balance : 0) - (y->left ? y->left->balance : 0);
+    x->balance = (x->right ? x->right->balance : 0) - (x->left ? x->left->balance : 0);
+
+    return x;
+}
+
+// Small left rotation
+binTreeNode *rotateLeft(binTreeNode *x) {
+    binTreeNode *y = x->right;
+    binTreeNode *T2 = y->left;
+
+    y->left = x;
+    x->right = T2;
+
+    x->balance = (x->right ? x->right->balance : 0) - (x->left ? x->left->balance : 0);
+    y->balance = (y->right ? y->right->balance : 0) - (y->left ? y->left->balance : 0);
+
+    return y;
+}
+
+// Big right rotation
+binTreeNode *rotateLeftRight(binTreeNode *node) {
+    node->left = rotateLeft(node->left);
+    return rotateRight(node);
+}
+
+// Big left rotation
+binTreeNode *rotateRightLeft(binTreeNode *node) {
+    node->right = rotateRight(node->right);
+    return rotateLeft(node);
+}
+
+int getBalance(binTreeNode *node) {
+    if (!node) {
+        return 0;
+    }
+    int leftBalance = node->left ? node->left->balance + 1 : 0;
+    int rightBalance = node->right ? node->right->balance + 1 : 0;
+    return leftBalance - rightBalance;
+}
+
+binTreeNode *balanceNode(binTreeNode *node) {
+    if (!node) {
+        return NULL;
+    }
+
+    node->balance = getBalance(node);
+
+    if (node->balance > 1) {
+        if (node->left && node->left->balance < 0) {
+            return rotateLeftRight(node);
+        }
+        return rotateRight(node);
+    }
+
+    if (node->balance < -1) {
+        if (node->right && node->right->balance > 0) {
+            return rotateRightLeft(node);
+        }
+        return rotateLeft(node);
+    }
+
+    return node;
 }
 
 void *getNodeData(binTreeNode *node) {
@@ -46,6 +121,7 @@ void addLeftChild(binTreeNode *node, binTreeNode *child) {
         return;
     }
     node->left = child;
+    --node->balance;
 }
 
 void addRightChild(binTreeNode *node, binTreeNode *child) {
@@ -53,6 +129,7 @@ void addRightChild(binTreeNode *node, binTreeNode *child) {
         return;
     }
     node->right = child;
+    ++node->balance;
 }
 
 binTreeNode *getLeftChild(binTreeNode *node) {
@@ -80,6 +157,9 @@ void clearNodeRepresent(binTreeNode *node) {
 }
 
 void freeNode(binTreeNode *node) { // !
+    if (!node) {
+        return;
+    }
     if (node->left) {
         freeNode(node->left);
     }
@@ -88,6 +168,20 @@ void freeNode(binTreeNode *node) { // !
     }
     free(node->data);
     free(node);
+}
+
+void freeLeftChild(binTreeNode *root) {
+    if (root || root->left) {
+        freeNode(root->left);
+        root->left;
+    }
+}
+
+void freeRightChild(binTreeNode *root) {
+    if (root || root->right) {
+        freeNode(root->right);
+        root->right;
+    }
 }
 
 static void printNodeRecursive(binTreeNode *node, char *(*convertDataToString)(void *), int depth) {
