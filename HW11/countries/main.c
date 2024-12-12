@@ -1,8 +1,20 @@
 #include <stdio.h>
 #include "graphManager.h"
 #include "fileManager.h"
+#ifdef TEST
+#include "test.h"
+#endif
 
 int main() {
+    #ifdef TEST
+        if (!validationTest()) {
+            puts("Something went wrong.");
+            return TEST;
+        } else {
+            puts("Ready to process.");
+        }
+    #endif
+
     StateGraph *states = createStateGraph(9);
     makeCapital(states, 3);
     makeCapital(states, 2);

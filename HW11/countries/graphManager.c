@@ -60,10 +60,12 @@ static bool isGraphCorrect(StateGraph *graph) {
 
 static int getFormingStatus(StateGraph *graph) {
     int status = 0;
+    int countOfCapitals = 0;
     for (int i = 0; i < graph->size; ++i) {
         status += graph->status[i] == NotLinked;
+        countOfCapitals += graph->status[i] == Capital;
     }
-    return status;
+    return countOfCapitals == 0 ? -1 : status;
 }
 
 void formStates(StateGraph *graph) {
@@ -72,8 +74,9 @@ void formStates(StateGraph *graph) {
         return;
     }
 
+    int formingStatus = getFormingStatus(graph);
     int townPeekIndex = 0;
-    while (getFormingStatus(graph) != 0) {
+    while (formingStatus > 0) {
         if (graph->status[townPeekIndex] != NotLinked) {
             int invadingTownIndex = -1;
             int minDistance = INT_MAX;
@@ -89,6 +92,7 @@ void formStates(StateGraph *graph) {
             if (invadingTownIndex != -1) {
                 int newStatus = graph->status[townPeekIndex] == Capital ? townPeekIndex : graph->status[townPeekIndex];
                 graph->status[invadingTownIndex] = newStatus;
+                --formingStatus;
             }
         }
         townPeekIndex = townPeekIndex + 1 < graph->size ? townPeekIndex + 1 : 0;

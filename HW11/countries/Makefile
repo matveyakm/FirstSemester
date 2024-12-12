@@ -17,25 +17,10 @@ CFLAGS = -Wall -Wextra -std=c11 $(TEST_FLAGS)
 SRC = main.c \
       fileManager.c \
       graphManager.c \
-      ../../localLibs/arrayFuncs/arrayFuncs.c \
-      ../../localLibs/binSearch/binSearch.c \
-      ../../localLibs/bubbleSort/bubbleSort.c \
-      ../../localLibs/insertionSort/insertionSort.c \
-      ../../localLibs/qsort/qsort.c \
-      ../../localLibs/queue/queueDeclaration.c \
-      ../../localLibs/stack/stackDeclaration.c \
-      ../../localLibs/testingTools/testingTools.c
+      test.c \
 
 # Файлы заголовков
-INCLUDES = -I. \
-            -I../../localLibs/arrayFuncs \
-            -I../../localLibs/binSearch \
-            -I../../localLibs/bubbleSort \
-            -I../../localLibs/insertionSort \
-            -I../../localLibs/qsort \
-            -I../../localLibs/queue \
-            -I../../localLibs/stack \
-            -I../../localLibs/testingTools
+INCLUDES = -I. 
 
 # Компиляция по умолчанию
 all: $(TARGET)
