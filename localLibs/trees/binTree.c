@@ -79,7 +79,7 @@ void clearNodeRepresent(binTreeNode *node) {
     free(node);
 }
 
-void freeNode(binTreeNode *node) { // !
+void freeNode(binTreeNode *node) {
     if (node->left) {
         freeNode(node->left);
     }
@@ -88,6 +88,29 @@ void freeNode(binTreeNode *node) { // !
     }
     free(node->data);
     free(node);
+}
+
+void freeLeftChild(binTreeNode *node) {
+    if (!node) {
+        return;
+    }
+    freeNode(node->left);
+    node->left = NULL;
+}
+
+void freeRightChild(binTreeNode *node) {
+    if (!node) {
+        return;
+    }
+    freeNode(node->right);
+    node->right = NULL;
+}
+
+bool isLeaf(binTreeNode *node) {
+    if (!node) {
+        return false;
+    }
+    return !node->right && !node->left;
 }
 
 static void printNodeRecursive(binTreeNode *node, char *(*convertDataToString)(void *), int depth) {
@@ -161,7 +184,7 @@ binTreeNode *interactWithBST(binTreeNode *node, void *data, int (*compare)(void 
                 addLeftChild(node, createNode(data));
                 return node->left;
             }
-            return node;
+            return NULL;
         }
         return interactWithBST(node->left, data, compare, action);
     }
@@ -171,10 +194,11 @@ binTreeNode *interactWithBST(binTreeNode *node, void *data, int (*compare)(void 
                 addRightChild(node, createNode(data));
                 return node->right;
             }
-            return node;
+            return NULL;
         }
         return interactWithBST(node->right, data, compare, action);
     }
+    puts("Err");
     return node;
 }
 
@@ -186,7 +210,6 @@ binTreeNode *addToBST(binTreeNode *node, void *data, int (*compare)(void *, void
     if (!data) {
         return NULL;
     }
-    
     return interactWithBST(node, data, compare, ADD);
 }
 
@@ -217,7 +240,7 @@ bool freeFromBST(binTreeNode *node, void *data, int (*compare)(void *, void *)) 
         binTreeNode *child = targetNode->left ? targetNode->left : targetNode->right;
         free(targetNode->data);
         *targetNode = *child;
-        free(child);
+        free(child);//
         return true;
     }
 
