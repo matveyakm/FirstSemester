@@ -16,7 +16,7 @@ struct HashMap {
     unsigned int count;
 };
 
-static unsigned int hashFunction(char *key, unsigned int tableSize) { //
+static unsigned int hashFunction(char *key, unsigned int tableSize) {
     unsigned int hash = 0;
     while (*key) {
         hash = (hash * 31 + *key++) % tableSize;
