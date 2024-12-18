@@ -1,0 +1,5 @@
+Hello world. My name is Matvey! This is the test for HashMap task.
+In next lines you are going to see just random words. Enjoy!
+For for fOr
+
+World 0 1 3 0 01 0 hash map map hashmap
