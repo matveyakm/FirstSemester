@@ -9,5 +9,4 @@ typedef struct Node {
 struct PtrList {
     Node *head;
     int length;
-    int type;
 };
