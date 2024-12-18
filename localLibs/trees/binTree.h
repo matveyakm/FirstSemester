@@ -15,15 +15,17 @@ void addRightChild(binTreeNode *node, binTreeNode *child);
 binTreeNode *getLeftChild(binTreeNode *node);
 binTreeNode *getRightChild(binTreeNode *node);
 void clearNodeRepresent(binTreeNode *node);
-// clears only a pointer but not the memory
+// clears only a pointer but not the memory. it is a dangerous action
 void freeNode(binTreeNode *node);
-// frees memory than clears the pointer
+// frees memory than clears the pointer. it is a dangerous action.
+void freeLeftChild(binTreeNode *node);
+void freeRightChild(binTreeNode *node);
+bool isLeaf(binTreeNode *node);
 void printNode(binTreeNode *node, char *(*convertDataToString)(void *));
 // function you passing must copy pointed content even if content has char* type
 PtrList *binTreeToPtrList(binTreeNode *node);
 
 // BST Utils
 binTreeNode *addToBST(binTreeNode *node, void *data, int (*compare)(void *, void *));
-// returns node of added node
 binTreeNode *findInBST(binTreeNode *node, void *data, int (*compare)(void *, void *));
 bool freeFromBST(binTreeNode *node, void *data, int (*compare)(void *, void *));
