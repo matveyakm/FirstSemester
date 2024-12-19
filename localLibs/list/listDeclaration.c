@@ -9,20 +9,19 @@ typedef struct Node {
 
 struct List {
     Node *head;
-    unsigned int length;
-    int type;
+    int length;
 };
 
 List *createList(int length) {
     List* list = malloc(sizeof(List));
     list->head = NULL;
     list->length = 0;
-    list->type = 3;
     while (list->length < length) {
         append(list, 0);
     }
     return list;
 }
+
 
 Node *createNode(int value) {
     Node* newNode = malloc(sizeof(Node));
@@ -35,14 +34,18 @@ int listLength(List *list) {
     return list->length;
 }
 
-void append(List *list, int value) {
-    struct Node *newNode = createNode(value);
+static int convertPosition(int length,int position) {
+    return position >= 0 ? position % length : position % length + length;
+}
 
-    if (list->head == NULL) {  // Если список пуст
+void appendL(List *list, int value) {
+    Node *newNode = createNode(value);
+
+    if (list->head == NULL) {
         list->head = newNode;
     } else {
-        Node* current = list->head;
-        while (current->next != NULL) {  // Переходим к последнему элементу
+        Node *current = list->head;
+        while (current->next != NULL) {
             current = current->next;
         }
         current->next = newNode;
@@ -50,14 +53,13 @@ void append(List *list, int value) {
     ++list->length;
 }
 
-void pushAt(List* list, int position, int value) {
+void addL(List *list, int position, int value) {
     if (position > list->length) {
         return;
-    } else if (position < 0) {
-        position += list->length;
     }
+    position = convertPosition(list->length, position);
 
-    Node* newNode = createNode(value);
+    Node *newNode = createNode(value);
     if (position == 0) {
         newNode->next = list->head;
         list->head = newNode;
@@ -95,12 +97,11 @@ int popL(List *list) {
     return removableNodeValue;
 }
 
-int popAt(List *list, int position) {
+int popAtL(List *list, int position) {
     if (position >= list->length) {
         return -1;
-    } else if (position < 0) {
-        position += list->length;
     }
+    position = convertPosition(list->length, position);
 
     int removableNodeValue;
     Node* temp;
@@ -123,12 +124,11 @@ int popAt(List *list, int position) {
     return removableNodeValue;
 }
 
-int peekAt(List *list, int position) {
+int peekL(List *list, int position) {
     if (position >= list->length) {
         return -1; 
-    } else if (position < 0) {
-        position += list->length;
     }
+    position = convertPosition(list->length, position);
 
     Node* current = list->head;
     for (int i = 0; i < position; ++i) {
