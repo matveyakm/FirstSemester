@@ -3,6 +3,10 @@
 #include "../../localLibs/list/cyclicList.h"
 #define TEST_FAILED 52
 
+// ===== !!! =====
+// The decision is controversial. Be critical.
+// ===== !!! =====
+
 int findK(int n, int m) {
     Cyclic *warriors = createCyclic(0);
     for (int i = 0; i < n; ++i) {
