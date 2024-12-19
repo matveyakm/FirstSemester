@@ -15,14 +15,15 @@ static bool insertTokenRecursive(binTreeNode **node, int *token) {
         binTreeNode *right = getRightChild(*node);
         if (!left) {
             addLeftChild(*node, createNode(token));
-        } else {
-            if (!insertTokenRecursive(&left, token)) {
-                if (!right) {
-                    addRightChild(*node, createNode(token));
-                    return true;
-                }
-                return insertTokenRecursive(&right, token);
+            return true;
+        }
+
+        if (!insertTokenRecursive(&left, token)) {
+            if (!right) {
+                addRightChild(*node, createNode(token));
+                return true;
             }
+            return insertTokenRecursive(&right, token);
         }
     } else {
         return false;

@@ -32,9 +32,9 @@ int calculateValue(binTreeNode *node) {
             return calculateValue(getLeftChild(node)) / calculateValue(getRightChild(node));
             break;
         default:
-            //err
+            return -1;
             break;
         }
     }
-    return 0; // err
+    return 0;
 }
