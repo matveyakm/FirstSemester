@@ -22,8 +22,9 @@ List *createList(int length) {
     return list;
 }
 
-static Node *createNode(int value) {
-    Node *newNode = malloc(sizeof(Node));
+
+Node *createNode(int value) {
+    Node* newNode = malloc(sizeof(Node));
     newNode->value = value;
     newNode->next = NULL;
     return newNode;
@@ -63,7 +64,7 @@ void addL(List *list, int position, int value) {
         newNode->next = list->head;
         list->head = newNode;
     } else {
-        Node *current = list->head;
+        Node* current = list->head;
         for (int i = 0; i < position - 1; ++i) {
             current = current->next;
         }
