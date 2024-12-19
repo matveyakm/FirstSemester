@@ -68,7 +68,7 @@ static int getFormingStatus(StateGraph *graph) {
     return countOfCapitals == 0 ? -1 : status;
 }
 
-void formStates(StateGraph *graph) {
+void formStates(StateGraph *graph) { // mistaken solution
     if (!graph || !isGraphCorrect(graph)) {
         puts("Not correct");
         return;
