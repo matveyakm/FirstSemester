@@ -23,7 +23,7 @@ char *convertIntToString(int integer) {
 
 char *convertDecimalToBinary(int decimal) {
     int maxCountOfCharsInInt = sizeof(int) * 8;
-    char *binary = malloc((maxCountOfCharsInInt+1) * sizeof(char));
+    char *binary = malloc((maxCountOfCharsInInt + 1) * sizeof(char));
     for (int i = 0; i < maxCountOfCharsInInt; ++i) {
         binary[maxCountOfCharsInInt - i - 1] = decimal & 1 ? '1' : '0';
         decimal >>= 1;
