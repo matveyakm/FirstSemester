@@ -33,7 +33,7 @@ int listLength(List *list) {
     return list->length;
 }
 
-static int convertPosition(int length,int position) {
+static int convertPosition(int length, int position) {
     return position >= 0 ? position % length : position % length + length;
 }
 
