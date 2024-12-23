@@ -2,29 +2,34 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "../../localLibs/testingTools/testingTools.h"
-#include "../../localLibs/list/listDeclaration.h"
-#include "listManager.h"
+#include "list/listDeclaration.h"
+
+#define LENGTH 2048
 
 bool validationTest(int countOfTests) {
-    List *sortedList = createList(0);
+    SortedList *sortedList = createSortedList(LENGTH);
+    if (!sortedList) {
+        return false;
+    }
 
-    int arrayLength = 2048;
+    int arrayLength = LENGTH;
     int *array = malloc(arrayLength * sizeof(int));
-    randomizeArray(array, arrayLength, 0);
 
+    // ADDING TEST
+    randomizeArray(array, arrayLength, 0);
     for (int i = 0; i < arrayLength; ++i) {
         addValue(sortedList, array[i]);
     }
 
-    int *sortedArray = listToArray(sortedList);
+    int *sortedArray = copySortedListIntoArray(sortedList, &arrayLength);
     
     qsorting(array, arrayLength);
 
     bool isTestSuccesful = isArraySorted(sortedArray, arrayLength) * areArraysEqual(array, sortedArray, arrayLength);
     free(array);
 
-    sortedList = arrayToList(sortedArray, arrayLength);
-    int deleteValuesArrayLength = 512;
+    // DELETING TEST
+    int deleteValuesArrayLength = LENGTH / 3;
     int *valueToDelete = malloc(deleteValuesArrayLength * sizeof(int));
     randomizeArray(valueToDelete, deleteValuesArrayLength, 0);
 
@@ -33,13 +38,14 @@ bool validationTest(int countOfTests) {
     }
 
     free(valueToDelete);
-    int newLength = listLength(sortedList);
-    sortedArray = listToArray(sortedList);
-    isTestSuccesful *= isArraySorted(sortedArray, newLength) * (newLength < arrayLength);
+    int newLength = -1 ;
+    sortedArray = copySortedListIntoArray(sortedList, &newLength);
+    isTestSuccesful *= isArraySorted(sortedArray, newLength) * (newLength <= arrayLength);
+
+    free(sortedArray);
 
     if (countOfTests == 0) {
         return isTestSuccesful;
     }
-
     return isTestSuccesful * validationTest(countOfTests - 1);
 }
