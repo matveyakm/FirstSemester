@@ -1,7 +1,7 @@
 #include <stdbool.h>
 
 bool selectionSort(int *array, int length) {
-    if (!array || length <= 1) {
+    if (!array || length < 1) {
         return false;
     }
 

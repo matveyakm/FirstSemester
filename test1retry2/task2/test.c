@@ -29,7 +29,8 @@ static bool validationTestRecursive(int testsLeft) {
     selectionSort(array, arrayLength);
 
     bool isTestSuccessful = isArraySorted(array, arrayLength);
-
+    
+    free(array);
     if (testsLeft == 0) {
         return isTestSuccessful;
     }
