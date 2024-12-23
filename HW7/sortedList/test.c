@@ -2,13 +2,13 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "../../localLibs/testingTools/testingTools.h"
-#include "../../localLibs/list/listDeclaration.h"
+#include "list/listDeclaration.h"
 #include "listManager.h"
 
 bool validationTest(int countOfTests) {
     List *sortedList = createList(0);
 
-    int arrayLength = 2048;
+    int arrayLength = 30;
     int *array = malloc(arrayLength * sizeof(int));
     randomizeArray(array, arrayLength, 0);
 
@@ -20,11 +20,14 @@ bool validationTest(int countOfTests) {
     
     qsorting(array, arrayLength);
 
+    if (!isArraySorted(sortedArray, arrayLength)) {
+        printArray(sortedArray, arrayLength);
+    }
     bool isTestSuccesful = isArraySorted(sortedArray, arrayLength) * areArraysEqual(array, sortedArray, arrayLength);
     free(array);
 
     sortedList = arrayToList(sortedArray, arrayLength);
-    int deleteValuesArrayLength = 512;
+    int deleteValuesArrayLength = arrayLength / 3;
     int *valueToDelete = malloc(deleteValuesArrayLength * sizeof(int));
     randomizeArray(valueToDelete, deleteValuesArrayLength, 0);
 

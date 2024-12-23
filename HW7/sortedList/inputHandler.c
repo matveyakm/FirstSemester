@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "listManager.h"
-#include "../../localLibs/list/listDeclaration.h"
+#include "list/listDeclaration.h"
 
 void startProccesing() {
     List *sortedList = createList(0);
@@ -12,7 +12,7 @@ void startProccesing() {
         puts("==Enter a command:");
         if (scanf("%d", &action) != 1) {
             puts("===You can only enter an integer number!===\nExiting...\n");
-            break; // 
+            break;
         }
         int value = 52;
         switch (action) {

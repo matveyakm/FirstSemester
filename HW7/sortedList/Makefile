@@ -18,22 +18,22 @@ SRC = main.c \
       inputHandler.c \
       listManager.c \
       test.c \
+      list/listDeclaration.c \
       ../../localLibs/arrayFuncs/arrayFuncs.c \
       ../../localLibs/binSearch/binSearch.c \
       ../../localLibs/bubbleSort/bubbleSort.c \
       ../../localLibs/insertionSort/insertionSort.c \
       ../../localLibs/qsort/qsort.c \
-      ../../localLibs/list/listDeclaration.c \
       ../../localLibs/testingTools/testingTools.c
 
 # Файлы заголовков
 INCLUDES = -I. \
+            -I/list \
             -I../../localLibs/arrayFuncs \
             -I../../localLibs/binSearch \
             -I../../localLibs/bubbleSort \
             -I../../localLibs/insertionSort \
             -I../../localLibs/qsort \
-            -I../../localLibs/list \
             -I../../localLibs/testingTools
 
 # Компиляция по умолчанию
