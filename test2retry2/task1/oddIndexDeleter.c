@@ -11,18 +11,15 @@ bool deleteElementsWithOddIndex(List *list) {
     }
     
     int index = 0;
-    bool needOdd = true;
+    bool needSwapParity = true;
     int errorCode = OK;
     while (index < getListLength(list)) {
-        //printf("%d:", index);
-        //printList(list);
-        if (index % 2 == needOdd) {
-            //printf("DELETED |%d|\n", peekL(list, index, &errorCode));
+        if (index % 2 == needSwapParity) {
             popAtL(list, index, &errorCode);
             if (errorCode != OK) {
                 return false;
             }
-            needOdd = !needOdd;
+            needSwapParity = !needSwapParity;
         } else {
             index += 1;
         }

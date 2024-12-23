@@ -25,6 +25,7 @@ int main() {
         appendL(list, i, &errorCode);
     }
 
+    printList(list);
     puts(deleteElementsWithOddIndex(list) ? "Processed" : "Something went wrong");
 
     printList(list);
