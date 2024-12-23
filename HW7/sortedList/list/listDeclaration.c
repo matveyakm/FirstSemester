@@ -1,218 +1,119 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
 #include "listDeclaration.h"
 
-typedef struct Node {
-    int value;
-    struct Node *next;
-} Node;
-
-struct List {
-    Node *head;
-    Node *tail;
+struct SortedList {
+    int *data;
     int length;
+    int capacity;
 };
 
-List *createList(int length) {
-    List* list = malloc(sizeof(List));
+SortedList *createSortedList(int capacity) {
+    SortedList *list = malloc(sizeof(SortedList));
     if (!list) {
         return NULL;
     }
-    list->head = NULL;
-    list->tail = NULL;
+    list->data = malloc(capacity * sizeof(int));
     list->length = 0;
-    while (list->length < length) {
-        appendL(list, 0);
-    }
+    list->capacity = capacity;
     return list;
 }
 
-static Node *createNode(int value) {
-    Node *newNode = malloc(sizeof(Node));
-    if (!newNode) {
-        return NULL;
+int getSortedListLength(SortedList *list) {
+    if(!list) {
+        return -1;
     }
-    newNode->value = value;
-    newNode->next = NULL;
-    return newNode;
-}
-
-int listLength(List *list) {
     return list->length;
 }
 
-static int convertPosition(int length, int position) {
-    return position >= 0 ? position % length : position % length + length;
+void resizeList(SortedList *list) {
+    list->capacity *= 2;
+    list->data = realloc(list->data, list->capacity * sizeof(int));
 }
 
-void appendL(List *list, int value) {
-    Node *newNode = createNode(value);
-    if (!newNode) {
-        return;
+void addValue(SortedList *list, int value) {
+    if (list->length == list->capacity) {
+        resizeList(list);
     }
-    
-    if (list->head == NULL) {
-        list->head = newNode;
-        list->tail = newNode;
-    } else {
-        list->tail->next = newNode;
-        list->tail = newNode;
+
+    int left = 0;
+    int right = list->length;
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+        if (list->data[mid] < value) {
+            left = mid + 1;
+        } else {
+            right = mid;
+        }
     }
+
+    for (int i = list->length; i > left; --i) {
+        list->data[i] = list->data[i - 1];
+    }
+
+    list->data[left] = value;
     ++list->length;
 }
 
-void addL(List *list, int position, int value) {
-    if (position < 0 || position > list->length) {
+bool deleteValue(SortedList *list, int value) {
+    int left = 0;
+    int right = list->length - 1;
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (list->data[mid] == value) {
+            for (int i = mid; i < list->length - 1; ++i) {
+                list->data[i] = list->data[i + 1];
+            }
+            --list->length;
+            return true;
+        } else if (list->data[mid] < value) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+    return false;
+}
+
+void deleteSortedList(SortedList *list) {
+    if (!list) {
         return;
     }
-    position = convertPosition(list->length, position);
-
-    Node *newNode = createNode(value);
-    if (!newNode) {
-        return;
+    if (list->data) {
+        free(list->data);
     }
-
-    if (position == 0) {
-        newNode->next = list->head;
-        list->head = newNode;
-        if (list->length == 0) {
-            list->tail = newNode;
-        }
-    } else if (position == list->length) {
-        appendL(list, value);
-    } else {
-        Node *current = list->head;
-        for (int i = 0; i < position - 1; ++i) {
-            current = current->next;
-        }
-        newNode->next = current->next;
-        current->next = newNode;
-    }
-    ++list->length;
+    free(list);
 }
 
-int popL(List *list) {
-    if (list->head == NULL) {
-        return -1;
-    }
-
-    int removableNodeValue;
-    if (list->head == list->tail) {
-        removableNodeValue = list->head->value;
-        free(list->head);
-        list->head = NULL;
-        list->tail = NULL;
-    } else {
-        Node *current = list->head;
-        while (current->next != list->tail) {
-            current = current->next;
-        }
-        removableNodeValue = list->tail->value;
-        free(list->tail);
-        current->next = NULL;
-        list->tail = current;
-    }
-    --list->length;
-    return removableNodeValue;
-}
-
-int popAtL(List *list, int position) {
-    if (position < 0 || position >= list->length) {
-        return -1;
-    }
-    position = convertPosition(list->length, position);
-
-    int removableNodeValue = 0;
-    Node *temp;
-    if (position == 0) {
-        temp = list->head;
-        removableNodeValue = temp->value;
-        list->head = list->head->next;
-        if (list->head == NULL) {
-            list->tail = NULL;
-        }
-        free(temp);
-    } else {
-        Node *current = list->head;
-        for (int i = 0; i < position - 1; ++i) {
-            current = current->next;
-        }
-        temp = current->next;
-        removableNodeValue = temp->value;
-        current->next = temp->next;
-        if (temp == list->tail) {
-            list->tail = current;
-        }
-        free(temp);
-    }
-    --list->length;
-    return removableNodeValue;
-}
-
-int peekL(List *list, int position) {
-    if (position < 0 || position >= list->length) {
-        return -1; 
-    }
-    position = convertPosition(list->length, position);
-
-    Node* current = list->head;
-    for (int i = 0; i < position; ++i) {
-        current = current->next;
-    }
-    return current->value;
-}
-
-void printList(List *list) {
-    if (list->head == NULL) {
-        puts("[]");
-        return;
-    }
-    printf("[");
-    Node *current = list->head;
-    while (current != NULL) {
-        printf("%d", current->value);
-        if (current->next != NULL) {
-            printf(", ");
-        }
-        current = current->next;
-    }
-    printf("]\n");
-}
-
-int *listToArray(List *list) {
-    const int length = list->length;
-    if (length < 1) {
+int *copySortedListIntoArray(SortedList *list, int *size) {
+    if (!list) {
+        *size = -1;
         return NULL;
     }
-    int *array = malloc(length * sizeof(int));
+    *size = list->length;
+    int *array = malloc(*size * sizeof(int));
+    memcpy(array, list->data, *size * sizeof(int));
+    return list->data;
+}
+
+SortedList *copyArrayIntoSortedList(int *array, int size) {
     if (!array) {
         return NULL;
     }
-
-    Node *current = list->head;
-    for (int i = 0; i < length; ++i) {
-        array[i] = current->value;
-        current = current->next;
-    }
-    return array;
-}
-
-List *arrayToList(int *array, int arrayLength) {
-    List *list = createList(0);
-    if (!list) {
-        return NULL;
-    }
-    for (int i = 0; i < arrayLength; ++i) {
-        appendL(list, array[i]);
-    }
+    SortedList *list = createSortedList(size);
+    memcpy(list->data, array, size * sizeof(int));
     return list;
 }
 
-void deleteList(List *list) {
-    while (list->head != NULL) {
-        Node *temp = list->head;
-        list->head = list->head->next;
-        free(temp);
+void printSortedList(SortedList *list) {
+    printf("[");
+    for (int i = 0; i < list->length; ++i) {
+        printf("%d", list->data[i]);
+        if (i < list->length - 1) {
+            printf(", ");
+        }
     }
-    free(list);
+    printf("]\n");
 }

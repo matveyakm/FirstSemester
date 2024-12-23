@@ -1,17 +1,14 @@
 #pragma once
-#include <stdio.h>
-#include <stdlib.h>
+#include <stdbool.h>
 
-typedef struct List List;
+typedef struct SortedList SortedList;
 
-List *createList(int length);
-int listLength(List *list);
-void addL(List *list, int position, int value);
-int popAtL(List *list, int position);
-int peekL(List *list, int position);
-void appendL(List *list, int value);
-int popL(List *list);
-void printList(List *list);
-int *listToArray(List *list);
-List *arrayToList(int *array, int arrayLength);
-void deleteList(List *list);
+SortedList *createSortedList(int capacity);
+int getSortedListLength(SortedList *list);
+void resizeList(SortedList *list);
+void addValue(SortedList *list, int value);
+bool deleteValue(SortedList *list, int value);
+int *copySortedListIntoArray(SortedList *list, int *size);
+SortedList *copyArrayIntoSortedList(int *array, int size);
+void deleteSortedList(SortedList *list);
+void printSortedList(SortedList *list);

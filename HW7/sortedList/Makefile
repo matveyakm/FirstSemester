@@ -16,7 +16,6 @@ CFLAGS = -Wall -Wextra -std=c11 $(TEST_FLAGS)
 # Файлы исходного кода
 SRC = main.c \
       inputHandler.c \
-      listManager.c \
       test.c \
       list/listDeclaration.c \
       ../../localLibs/arrayFuncs/arrayFuncs.c \

@@ -1,11 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "listManager.h"
 #include "list/listDeclaration.h"
 
 void startProccesing() {
-    List *sortedList = createList(0);
+    SortedList *sortedList = createSortedList(0);
     bool needToLoop = true;
     while (needToLoop) {
         int action = 52;
@@ -43,7 +42,7 @@ void startProccesing() {
 
         case 3:
             printf("=");
-            printList(sortedList);
+            printSortedList(sortedList);
             break;
 
         default:
@@ -57,5 +56,5 @@ void startProccesing() {
             break;
         }
     }
-    deleteList(sortedList);
+    deleteSortedList(sortedList);
 }

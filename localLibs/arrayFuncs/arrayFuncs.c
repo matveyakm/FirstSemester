@@ -9,6 +9,9 @@ void swap(int *a, int *b) {
 }
 
 bool isArraySorted(int *arrayNeedToCheck, const int arrayLength) {
+    if (arrayLength < 0) {
+        return false;
+    }
     if (arrayLength <= 1) {
         return true;
     }
