@@ -4,6 +4,7 @@
 #include <string.h>
 
 #define MAX_LENGTH_OF_LINE 2048
+#define MAX_COUNT_OF_LINES 100
 
 char *getCommentsFromFile(char *filename) {
     FILE *file = fopen(filename, "r");
@@ -11,7 +12,7 @@ char *getCommentsFromFile(char *filename) {
         return NULL;
     }
 
-    char *outputComments = malloc(MAX_LENGTH_OF_LINE * 100 * sizeof(char));
+    char *outputComments = malloc(MAX_LENGTH_OF_LINE * MAX_COUNT_OF_LINES * sizeof(char));
     if (!outputComments) {
         fclose(file);
         return NULL;
